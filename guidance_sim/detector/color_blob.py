@@ -4,8 +4,10 @@
 import cv2
 import numpy as np
 
-LOWER = np.array([0, 90, 90])     # 红色 HSV 下界
+LOWER = np.array([0, 90, 90])     # 红色 HSV 下界 (H 跨 0 与 180 两端, 双区间)
 UPPER = np.array([10, 255, 255])
+LOWER2 = np.array([170, 90, 90])
+UPPER2 = np.array([180, 255, 255])
 
 
 class Detector:
@@ -15,7 +17,7 @@ class Detector:
     def detect(self, frame):
         img = frame["img"]
         hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
-        mask = cv2.inRange(hsv, LOWER, UPPER)
+        mask = cv2.inRange(hsv, LOWER, UPPER) | cv2.inRange(hsv, LOWER2, UPPER2)
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN,
                                 cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3)))
         cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

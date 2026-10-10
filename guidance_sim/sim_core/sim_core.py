@@ -143,5 +143,11 @@ class SimCore:
                                            renderer=p.ER_TINY_RENDERER)
         img = np.reshape(rgb, (h, w, 4))[:, :, :3].astype(np.uint8)
         K = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
-        return {"img": img, "K": K, "T_WC": None, "t": self.t,
+        # T_WC: C 系基 (x_C,y_C,z_C) 在 Bp 下为 (y_B, z_B, x_B) → R_WC 列即各轴世界向量;
+        # 平移 = 弹头相机位置 (质心前方 0.5m, 占位)
+        R_WC = np.column_stack([R_WB[:, 1], R_WB[:, 2], R_WB[:, 0]])
+        T_WC = np.eye(4)
+        T_WC[:3, :3] = R_WC
+        T_WC[:3, 3] = np.array(pos) + R_WB[:, 0] * 0.5
+        return {"img": img, "K": K, "T_WC": T_WC, "t": self.t,
                 "R_WB": R_WB, "pos_W": np.array(pos)}
