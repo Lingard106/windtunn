@@ -55,3 +55,8 @@ desktop.ini
 
 # 运行日志不进库 (devlog 已蒸馏结论)
 *.log
+
+# ==== guidance_sim ====
+guidance_sim/.venv/
+guidance_sim/records/
+__pycache__/

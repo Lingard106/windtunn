@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!-- 占位滑翔模型 Phase 0: 圆柱弹体 + 4 片十字尾舵 (revolute ±20°)
+     真实模型到位后整体替换; 参数: 质量 10kg, 长 1.2m, 直径 0.15m, 质心位于 link 原点 -->
+<robot name="glider_phase0">
+  <material name="body_gray"><color rgba="0.45 0.45 0.5 1"/></material>
+  <material name="fin_orange"><color rgba="0.9 0.5 0.1 1"/></material>
+
+  <link name="body">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="10.0"/>
+      <!-- 细圆柱近似: Ixx(滚转)=1/2 m r^2, Iyy=Izz=m(L^2/12+r^2/4) -->
+      <inertia ixx="0.028" iyy="1.214" izz="1.214" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.075" length="1.2"/></geometry>
+      <material name="body_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.075" length="1.2"/></geometry>
+    </collision>
+  </link>
+
+  <!-- 水平对 (差动=滚转 da, 同向=俯仰 de): 铰链轴 y -->
+  <link name="fin_up">
+    <inertial><mass value="0.05"/><inertia ixx="1e-5" iyy="1e-4" izz="1e-4" ixy="0" ixz="0" iyz="0"/></inertial>
+    <visual><origin xyz="-0.05 0 0.06"/><geometry><box size="0.10 0.12 0.003"/></geometry><material name="fin_orange"/></visual>
+  </link>
+  <joint name="j_fin_up" type="revolute">
+    <parent link="body"/><child link="fin_up"/>
+    <origin xyz="-0.55 0 0.03" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/><limit lower="-0.35" upper="0.35" effort="10" velocity="5"/>
+  </joint>
+  <link name="fin_down">
+    <inertial><mass value="0.05"/><inertia ixx="1e-5" iyy="1e-4" izz="1e-4" ixy="0" ixz="0" iyz="0"/></inertial>
+    <visual><origin xyz="-0.05 0 -0.06"/><geometry><box size="0.10 0.12 0.003"/></geometry><material name="fin_orange"/></visual>
+  </link>
+  <joint name="j_fin_down" type="revolute">
+    <parent link="body"/><child link="fin_down"/>
+    <origin xyz="-0.55 0 -0.03" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/><limit lower="-0.35" upper="0.35" effort="10" velocity="5"/>
+  </joint>
+
+  <!-- 垂直对 (同向=偏航 dr): 铰链轴 z -->
+  <link name="fin_left">
+    <inertial><mass value="0.05"/><inertia ixx="1e-5" iyy="1e-4" izz="1e-4" ixy="0" ixz="0" iyz="0"/></inertial>
+    <visual><origin xyz="-0.05 -0.06 0"/><geometry><box size="0.10 0.003 0.12"/></geometry><material name="fin_orange"/></visual>
+  </link>
+  <joint name="j_fin_left" type="revolute">
+    <parent link="body"/><child link="fin_left"/>
+    <origin xyz="-0.55 -0.03 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/><limit lower="-0.35" upper="0.35" effort="10" velocity="5"/>
+  </joint>
+  <link name="fin_right">
+    <inertial><mass value="0.05"/><inertia ixx="1e-5" iyy="1e-4" izz="1e-4" ixy="0" ixz="0" iyz="0"/></inertial>
+    <visual><origin xyz="-0.05 0.06 0"/><geometry><box size="0.10 0.003 0.12"/></geometry><material name="fin_orange"/></visual>
+  </link>
+  <joint name="j_fin_right" type="revolute">
+    <parent link="body"/><child link="fin_right"/>
+    <origin xyz="-0.55 0.03 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/><limit lower="-0.35" upper="0.35" effort="10" velocity="5"/>
+  </joint>
+</robot>
