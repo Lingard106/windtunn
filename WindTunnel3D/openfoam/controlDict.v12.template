@@ -1,0 +1,78 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object controlDict;
+}
+
+application     foamRun;
+solver          incompressibleFluid;
+
+startFrom       latestTime;
+startTime       0;
+stopAt          endTime;
+endTime         6200;
+
+deltaT          1;
+
+writeControl    timeStep;
+writeInterval   250;
+purgeWrite      2;
+writeFormat     ascii;
+writePrecision  6;
+writeCompression off;
+runTimeModifiable true;
+
+functions
+{
+    rotorMean
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        select          cellZone;
+        cellZone        rotorZone;
+        operation       volAverage;
+        fields          (U);
+        writeControl    timeStep;
+        writeInterval   10;
+        writeFields     false;
+        log             true;
+    }
+    outletQ
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        select          patch;
+        patch           skin_outletCap;
+        operation       sum;
+        fields          (phi);
+        writeControl    timeStep;
+        writeInterval   10;
+        writeFields     false;
+        log             true;
+    }
+    tsMean
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        select          cellZone;
+        cellZone        tsZone;
+        operation       volAverage;
+        fields          (U);
+        writeControl    timeStep;
+        writeInterval   10;
+        writeFields     false;
+        log             true;
+    }
+    residuals
+    {
+        type            residuals;
+        libs            ("libutilityFunctionObjects.so");
+        fields          (p U);
+        writeControl    timeStep;
+        writeInterval   50;
+    }
+}
+
+// ************************************************************************* //

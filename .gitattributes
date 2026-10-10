@@ -1,0 +1,5 @@
+# 统一 LF: run_mrf.sh 等要在 WSL/bash 执行, CRLF 会炸
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.mp4 binary

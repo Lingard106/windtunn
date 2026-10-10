@@ -1,0 +1,7 @@
+function v = prctile2(A, q)
+v = A(isfinite(A));  v = sort(v(:));
+if isempty(v), v = 0; return; end
+v = v(max(1,min(numel(v),round(q/100*numel(v)))));
+end
+
+function [Xq, map] = quantize64(RGB)

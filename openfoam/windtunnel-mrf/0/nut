@@ -1,0 +1,22 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volScalarField;
+    object nut;
+}
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    skin_inletCap  { type calculated; value uniform 0; }
+    skin_outletCap { type calculated; value uniform 0; }
+    skin_casing    { type nutkWallFunction; value uniform 0; }
+    impeller  { type nutkWallFunction; value uniform 0; }
+    inlet     { type nutkWallFunction; value uniform 0; }
+    outlet    { type nutkWallFunction; value uniform 0; }
+    boxUnused { type nutkWallFunction; value uniform 0; }
+}

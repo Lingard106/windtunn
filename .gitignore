@@ -1,0 +1,57 @@
+# WindTunnelSuite gitignore — 原则: 源码/文档/脚本/成果图进库, 数据/构建物/可再生产物排除
+# 数据可由生成器重出: STL(gen_*.m) / raw(export脚本) / mat(求解结果) / vtk(foamToVTK)
+
+# ==== 二进制数据 / 可再生产物 ====
+*.vtk
+*.vtu
+*.pvtu
+*.mat
+*.raw
+*.bin
+*.stl
+*.obj
+*.exe
+*.dll
+*.zip
+*.7z
+*.o
+
+# ==== FluidX3D 源码树: 保留 src/, 排除构建与数据目录 ( vtk* 共 ~120G ) ====
+**/fluidx3d/vtk*/
+**/fluidx3d/build*/
+**/fluidx3d/x64/
+**/fluidx3d/.vs/
+**/fluidx3d/*.raw
+
+# ==== 工具链安装物 (重装可得) ====
+WindTunnel3D/tools/cmake/
+WindTunnel3D/tools/cmake.zip
+WindTunnel3D/tools/vs_BuildTools.exe
+
+# ==== OpenFOAM case 运行产物 (进库的只有 system/ dict、tools/ 模板脚本、0/ 初始场) ====
+processor*/
+postProcessing/
+logs/
+log.*
+log.*.*
+**/constant/polyMesh/
+**/constant/triSurface/
+**/tri/
+[0-9][0-9][0-9]*          # 时间目录 (2000/ 3000.00202/ ...), 0/ 初始场保留
+
+# ==== 归档 / 备份 ====
+_archive/
+_archive_renders/
+_backup*/
+*.asv
+*.m~
+
+# ==== renders: 图像/视频成果进库, 渲染数据源 vtk/ 排除 ====
+renders/**/vtk/
+
+# ==== 杂项 ====
+Thumbs.db
+desktop.ini
+
+# 运行日志不进库 (devlog 已蒸馏结论)
+*.log

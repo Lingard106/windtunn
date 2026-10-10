@@ -1,0 +1,301 @@
+﻿{
+	"type": "gh",
+	"name": "ProjectPhysX/FluidX3D",
+	"version": "3.7",
+	"default": null,
+	"files": [
+		{
+			"name": "/.gitattributes",
+			"hash": "RFl/aitPOS5d0jHepjAz0LEFP6H+a3uha6lilWNwc6U=",
+			"size": 169
+		},
+		{
+			"name": "/.gitignore",
+			"hash": "jzQ5JZVu6mPEOtaoxk07XZT2Dc4PyhKvstJx3983L3A=",
+			"size": 42
+		},
+		{
+			"name": "/CITATION.cff",
+			"hash": "+JUKVkoMmujgFbRb3RcXopmpqCMOJLslLnMjJAUuCE0=",
+			"size": 280
+		},
+		{
+			"name": "/DOCUMENTATION.md",
+			"hash": "Zyih2+/JaL7pFfLSzQUUH2cFMFM+ktz+13nzmRoFfs8=",
+			"size": 41480
+		},
+		{
+			"name": "/FluidX3D.sln",
+			"hash": "tOe8BKpsMmO2m5syKASmEw8DjmUoBztSwTEPMKzh2kI=",
+			"size": 903
+		},
+		{
+			"name": "/FluidX3D.vcxproj",
+			"hash": "uAO1ni26fh3BZvotIw7pBI5A42mN78m0KZlyDpdGWRM=",
+			"size": 4422
+		},
+		{
+			"name": "/LICENSE.md",
+			"hash": "p1RTwzJ2SQylQX2I87AoEiNpi4Y/3hBoMywxyGNe/mc=",
+			"size": 2910
+		},
+		{
+			"name": "/make.sh",
+			"hash": "Ujm5PolFkCj6ylPqqAym28gW0QTKbQzgJjTh1psIycQ=",
+			"size": 2463
+		},
+		{
+			"name": "/makefile",
+			"hash": "LsurD06nTg4OsW2BeNjEMw257wh4XHFqYPVHaQQKrLI=",
+			"size": 2685
+		},
+		{
+			"name": "/README.md",
+			"hash": "/NCZIGySpUPlSsrMhy6+sSnYwjuxLHotMrOtjt0zNM4=",
+			"size": 171919
+		},
+		{
+			"name": "/skybox/skybox8k.png",
+			"hash": "imZXn4k0wOl2wrbGwmEa6bPB6IHaLcmpNKEpCimPYzg=",
+			"size": 20796312
+		},
+		{
+			"name": "/src/defines.hpp",
+			"hash": "mNKDPnegKqiYW1635GKmGJUrVYiiNRy05/wm/2zyY4c=",
+			"size": 6806
+		},
+		{
+			"name": "/src/graphics.cpp",
+			"hash": "eRNV3CtiMYJWXYdcR5TjDd+F6AVvTazUj41pyJvX544=",
+			"size": 40925
+		},
+		{
+			"name": "/src/graphics.hpp",
+			"hash": "TiUbYPfIsxSZmvRzZdyqXlMMzyiem75/OfDbBRbUQec=",
+			"size": 12740
+		},
+		{
+			"name": "/src/icon.ico",
+			"hash": "F2Lo49+Wmjg9BqsGSCtOFwjxBNwGSi2GpE4gUFVBm8w=",
+			"size": 5394
+		},
+		{
+			"name": "/src/info.cpp",
+			"hash": "uwmW9HCkYUZ/Ai8/mtovZLpKIT0tYycyYFPyV+ydVXs=",
+			"size": 9956
+		},
+		{
+			"name": "/src/info.hpp",
+			"hash": "tFsYfp3z1iJ2s5xAlqN4xJMETd6ER4u7D+fNugQqeGM=",
+			"size": 1184
+		},
+		{
+			"name": "/src/kernel.cpp",
+			"hash": "758A3nt2KRECEFfkFXeqbiKaz+/trzHtlXRsLsuL01U=",
+			"size": 195385
+		},
+		{
+			"name": "/src/kernel.hpp",
+			"hash": "fyx5Id8CwZUBZqdr7WknPIQohL3mnXyEpPQoGJNpFfY=",
+			"size": 8212
+		},
+		{
+			"name": "/src/lbm.cpp",
+			"hash": "Hgrw8tB9ilPpQwbqAk/rPMWZUMcLl6LpeBqoZhkvKIs=",
+			"size": 80413
+		},
+		{
+			"name": "/src/lbm.hpp",
+			"hash": "4ipCwTxICR6BDZPxCLTMLbuKUPpr6+f8c26qaPs+QEI=",
+			"size": 36827
+		},
+		{
+			"name": "/src/lodepng.cpp",
+			"hash": "c4j/LlvOuqcSEiojCFYZpHvNoWHWPLs7dGk3gQAQJqc=",
+			"size": 247808
+		},
+		{
+			"name": "/src/lodepng.hpp",
+			"hash": "bA1Bhvb4Et4LZv2taAOZOqsKklpCHq55mHnuOWdde/w=",
+			"size": 48087
+		},
+		{
+			"name": "/src/main.cpp",
+			"hash": "Yk8qI/eVXc6g2ciwGAY99oszl3YFuZ6+jB4pV4Lb9jY=",
+			"size": 11690
+		},
+		{
+			"name": "/src/opencl.hpp",
+			"hash": "ajpGkqiaflljdWQh+if8TOr/FMFJr4blwkDl3ICB4ZY=",
+			"size": 47317
+		},
+		{
+			"name": "/src/OpenCL/include/CL/cl.h",
+			"hash": "PFGUnDi/m8ptvpGaH2Bye60e9KejIcbVMPdQLdwf1wY=",
+			"size": 81582
+		},
+		{
+			"name": "/src/OpenCL/include/CL/cl_ext.h",
+			"hash": "Lx6ZPHqNYir8mS2VLZFVtAizX/sV93y+gPp4huSuEEI=",
+			"size": 147745
+		},
+		{
+			"name": "/src/OpenCL/include/CL/cl_gl.h",
+			"hash": "Yho6H7M2BKkCZYT8QjEQueyqCUrCyM89LD3+eV3ru/8=",
+			"size": 12535
+		},
+		{
+			"name": "/src/OpenCL/include/CL/cl_platform.h",
+			"hash": "vpZH0SG/6iDPrJ/ivi46x4UaDdd6FBNj3McvEmoaNYw=",
+			"size": 43222
+		},
+		{
+			"name": "/src/OpenCL/include/CL/cl_version.h",
+			"hash": "GxYfc8DwsHEhMUBV9132wZ1qk+Og0kICxvPi3RYVsqI=",
+			"size": 3125
+		},
+		{
+			"name": "/src/OpenCL/include/CL/opencl.h",
+			"hash": "mnb6Y2MOj9WzC15saS2+erIu3/cI3+agbQSjZxp3FuE=",
+			"size": 970
+		},
+		{
+			"name": "/src/OpenCL/include/CL/opencl.hpp",
+			"hash": "DpPbtDHKe5CMiHVEQPYYoGF/QBM1j2ac6uMC7cebd2k=",
+			"size": 419247
+		},
+		{
+			"name": "/src/OpenCL/lib/libOpenCL.so",
+			"hash": "ZyWrA3lbbBpmEYdLlk1oZTmrfdhPLGbXnIi3umoefaI=",
+			"size": 27424
+		},
+		{
+			"name": "/src/OpenCL/lib/OpenCL.lib",
+			"hash": "Gt7EQIuCG7vuRkTL4sJEn7ulfRNlzjEvzm5ml8t+V2s=",
+			"size": 25870
+		},
+		{
+			"name": "/src/resource.rc",
+			"hash": "+76HnrdoyvTElfW9nr8RYksNJFXYnbHgdj3Uy4iMZtI=",
+			"size": 729
+		},
+		{
+			"name": "/src/setup.cpp",
+			"hash": "+9fWNQ2q7X+7wCiM45vrDaNf4l6tmiwAnIql6Vi/jo4=",
+			"size": 91541
+		},
+		{
+			"name": "/src/setup.hpp",
+			"hash": "YcRd02V5SmHmcTcJ8cnHApC3G6lDxqS1V4cpuUIbOGk=",
+			"size": 118
+		},
+		{
+			"name": "/src/shapes.cpp",
+			"hash": "6SHFodSGoXuseUyNkLv0SpgKZ8CS57o8UazLDHTW/Jg=",
+			"size": 7974
+		},
+		{
+			"name": "/src/shapes.hpp",
+			"hash": "5NyJ0vLQAuId1rflH83coZ6He11Qrhfq0jYhePLDNL8=",
+			"size": 2211
+		},
+		{
+			"name": "/src/units.hpp",
+			"hash": "Xtb1sTzrK5HojYKBHgUEZEHOKSDzxZupjterpvQ05cY=",
+			"size": 18487
+		},
+		{
+			"name": "/src/utilities.hpp",
+			"hash": "tqyM/CcAym7u47TE3L9zk/MZjQLvGrM9KO/XH4CSkVY=",
+			"size": 173949
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/randr.h",
+			"hash": "zyXMMAgHsHKKwYgPIh9XpvlMJ1fPiQ6s9ejFm6xym/g=",
+			"size": 6909
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/render.h",
+			"hash": "aNhodkZM/jE3uYDQM9dC5z449Hfuqri7PSgwhkzEJMo=",
+			"size": 6933
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/XKB.h",
+			"hash": "tmdunHpekmeNXZaBBWEdQf80TwsULI8Wg2D75+HhdiM=",
+			"size": 28211
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/XKBstr.h",
+			"hash": "Vk7B56mjuQRpT1WuAgJLPgbHaFEyjwlXXi1CywUKKm0=",
+			"size": 19630
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/Xrandr.h",
+			"hash": "SN+pFv4CAbiTU2Cr1OndXkIbEak6a2pdASnApjpprNA=",
+			"size": 17120
+		},
+		{
+			"name": "/src/X11/include/X11/extensions/Xrender.h",
+			"hash": "RGvPsoVLpKqUG7S343K6hgbV7NGrMNQTzTdut37RBfA=",
+			"size": 12805
+		},
+		{
+			"name": "/src/X11/include/X11/keysym.h",
+			"hash": "Gmq7II5hfjjuBp+LAUUYw8KBX2pORuD7OEp7//ZEBcQ=",
+			"size": 2769
+		},
+		{
+			"name": "/src/X11/include/X11/keysymdef.h",
+			"hash": "lyI3Vb47T6FmPC2GQTYP0olfV0FxkAZ2D0dlCo+nGmg=",
+			"size": 175248
+		},
+		{
+			"name": "/src/X11/include/X11/X.h",
+			"hash": "PzzgeacdJnhOopinWin7it1vD0Cc82hQvqfUKP2xqfs=",
+			"size": 20137
+		},
+		{
+			"name": "/src/X11/include/X11/Xdefs.h",
+			"hash": "M67vdH5rH6xGWryh8sTSM87yrbrXJx91W6kv5WS/Igc=",
+			"size": 2401
+		},
+		{
+			"name": "/src/X11/include/X11/Xfuncproto.h",
+			"hash": "7XmRNnT7iLbgLD9fykR3aoUFtfekGQFcLoPbYNKeds0=",
+			"size": 7863
+		},
+		{
+			"name": "/src/X11/include/X11/XKBlib.h",
+			"hash": "ppeagB6l3T9mwwv7x8AXWRGQdLrh382uGV/eE6kGXDs=",
+			"size": 30995
+		},
+		{
+			"name": "/src/X11/include/X11/Xlib.h",
+			"hash": "eyV67hd6I8OhlI823F9I1NsA4zlkpOMsy6VaKZTX6iM=",
+			"size": 99532
+		},
+		{
+			"name": "/src/X11/include/X11/Xosdefs.h",
+			"hash": "yrCi1kx9ddzAdxi70HpgRr4lTNkVD7gQwRNKtVFTK1s=",
+			"size": 3115
+		},
+		{
+			"name": "/src/X11/include/X11/Xutil.h",
+			"hash": "7ab4F1sK21eHqXiddOLDeNCk7qxCeiBSxViDA+BtkgY=",
+			"size": 21353
+		},
+		{
+			"name": "/src/X11/lib/libX11.so",
+			"hash": "IOC5+TKo3WXfXF5nGt6P5gZXWX9bfQS/sphJTD0dVQY=",
+			"size": 1293928
+		},
+		{
+			"name": "/src/X11/lib/libXrandr.so",
+			"hash": "sZBvNREhO5frrB7DliMLOBmgl27MLFSmrLkJZ2zMytc=",
+			"size": 47504
+		}
+	],
+	"links": {
+		"stats": "https://data.jsdelivr.com/v1/stats/packages/gh/ProjectPhysX/FluidX3D@3.7"
+	}
+}

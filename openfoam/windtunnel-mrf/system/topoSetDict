@@ -1,0 +1,28 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object topoSetDict;
+}
+
+actions
+(
+    {
+        name    rotorZone;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+        p1      (-0.5556 0.1225 0.3726);
+        p2      (-0.5556 -0.1185 0.3726);
+        radius  0.2320;
+    }
+    {
+        name    tsZone;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        box     (1.56 -0.145 -0.095) (1.74 0.145 0.095);
+    }
+);
+

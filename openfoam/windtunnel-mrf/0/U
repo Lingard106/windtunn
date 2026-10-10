@@ -1,0 +1,30 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volVectorField;
+    object U;
+}
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    skin_inletCap
+    {
+        type            pressureInletOutletVelocity;
+        value           uniform (0 0 0);
+    }
+    skin_outletCap
+    {
+        type            pressureInletOutletVelocity;
+        value           uniform (0 0 0);
+    }
+    skin_casing    { type noSlip; }
+    impeller  { type MRFnoSlip; }   // org v12: 旋转壁必须用此 BC (2026-10-04 实证)
+    inlet     { type noSlip; }
+    outlet    { type noSlip; }
+    boxUnused { type noSlip; }
+}

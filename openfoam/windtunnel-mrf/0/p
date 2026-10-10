@@ -1,0 +1,31 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volScalarField;
+    object p;
+}
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    skin_inletCap
+    {
+        type            totalPressure;
+        p0              uniform 0;
+        value           uniform 0;
+    }
+    skin_outletCap
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    skin_casing    { type zeroGradient; }
+    impeller  { type zeroGradient; }
+    inlet     { type zeroGradient; }
+    outlet    { type zeroGradient; }
+    boxUnused { type zeroGradient; }
+}

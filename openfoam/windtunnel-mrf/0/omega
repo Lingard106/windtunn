@@ -1,0 +1,22 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volScalarField;
+    object omega;
+}
+
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 500;
+
+boundaryField
+{
+    skin_inletCap  { type fixedValue; value uniform 500; }
+    skin_outletCap { type inletOutlet; inletValue uniform 500; value uniform 500; }
+    skin_casing    { type omegaWallFunction; value uniform 500; }
+    impeller  { type omegaWallFunction; value uniform 500; }
+    inlet     { type omegaWallFunction; value uniform 500; }
+    outlet    { type omegaWallFunction; value uniform 500; }
+    boxUnused { type omegaWallFunction; value uniform 500; }
+}

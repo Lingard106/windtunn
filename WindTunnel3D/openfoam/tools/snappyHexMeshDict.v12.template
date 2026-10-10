@@ -1,0 +1,112 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    object snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh on;
+snap            on;
+addLayers       off;
+
+geometry
+{
+    skin.stl     { type triSurfaceMesh; name skin; }
+    impeller.stl { type triSurfaceMesh; name impeller; }
+    testobj.stl { type triSurfaceMesh; name testobj; }
+    fanBox   { type searchableBox;      min (-1.1156 -0.16 -0.1774); max (0.001 0.16 0.9276); }
+    rotorCyl { type searchableCylinder; point1 (-0.5556 0.1225 0.3726); point2 (-0.5556 -0.1185 0.3726); radius 0.2340; }
+    tsBox    { type searchableBox;      min (1.50 -0.16 -0.11); max (1.80 0.16 0.11); }
+}
+
+castellatedMeshControls
+{
+    features
+    (
+    );
+
+    refinementSurfaces
+{
+    skin
+    {
+        level (1 1);
+        patchInfo { type wall; }
+        regions
+        {
+            inletCap  { level (0 0); patchInfo { type patch; } }
+            outletCap { level (0 0); patchInfo { type patch; } }
+        }
+    }
+    impeller { level (2 2); patchInfo { type wall; } }
+    testobj { level (2 2); patchInfo { type wall; } }
+}
+
+    refinementRegions
+{
+    fanBox   { mode inside; levels ((1e5 1)); }
+    rotorCyl { mode inside; levels ((1e5 2)); }
+    tsBox    { mode inside; levels ((1e5 2)); }
+}
+
+    locationInMesh (1.651 0.013 0.017);
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 50;
+    nRelaxIter 5;
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap false;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+    layers {}
+    expansionRatio 1.0;
+    finalLayerThickness 0.5;
+    minThickness 0.25;
+    nGrow 0;
+    featureAngle 60;
+    slipFeatureAngle 30;
+    nRelaxIter 5;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    minMedialAxisAngle 90;
+}
+
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-15;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 3;
+    errorReduction 0.75;
+    relaxed
+    {
+        maxNonOrtho 66;
+    }
+}
+
+mergeTolerance 1e-6;
+
+// ************************************************************************* //
