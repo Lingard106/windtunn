@@ -1,6 +1,7 @@
 # 制导闭环全仿真链路 — 算法对接技术开发文档
 
-> 版本 v0.5 (2026-10-08) | 注记仅记录需求与设计变更, 措辞润色不计入 |
+> 版本 v0.6 (2026-10-14) | 注记仅记录需求与设计变更, 措辞润色不计入 |
+> v0.6: 视觉侧确认环境引擎选用 **MuJoCo** — §5.1.1 选型表 M1-M3 阶段由 PyBullet 内建渲染改为 MuJoCo; 6DOF 物理归属 (sim_core 保留 vs MuJoCo 承载) 与气动力注入约定待对齐会确认, 问题清单见 `docs/mujoco_alignment_questions.md`; **CFD 侧交付物 (§4.1 aero_table.csv / lookup_aero) 引擎无关, 不受此变更影响**。
 > v0.5: sim_core/虚拟相机/占位识别与制导已实现 (Phase 0, 见 guidance_sim/README); 补 los_Bp 注入约定 (§4.5.2); T_WC 已实现。
 > v0.4: 补 §4.5.1-4.5.3 控制链路/视觉链路/咬合验证。
 > v0.3: 补 §5.1.1 3D 环境引擎分阶段选型 (PyBullet→Unity/UE→Gazebo 路线, Isaac Sim 因 A 卡排除)。
@@ -197,19 +198,24 @@ monte_carlo(n=1000, guidance=YourGuidance, detector=YourDetector)
 
 ### 5.1 选型结论
 
-- **主线 = Python 3.11 + PyBullet + OpenCV + numpy/scipy** (方案 C):
+- **主线 = Python 3.11 + OpenCV + numpy/scipy** (方案 C):
   闭环 500Hz 单核可跑, 虚拟相机原生, 单机夜间可完成数千发 Monte Carlo。
+  **v0.6: 环境引擎由 PyBullet 内建改为 MuJoCo (视觉侧确认)** — 气动查表参考实现
+  (`lookup_aero.py`) 为纯 numpy, 引擎无关; 6DOF 物理归属与气动力注入约定待对齐会
+  (`docs/mujoco_alignment_questions.md`) 确认后, 本节与 §4 相应条目随之更新。
 - 备选已评审: MATLAB/Simulink(控制验证), Unity/ML-Agents(展示/RL), Gazebo/ROS2(上真机前工程化) —
   接口语义与 §4 一致, 需要时再做桥接, **算法逻辑零重写**。
 
 #### 5.1.1 3D 环境引擎分阶段选型 (视觉层与物理层解耦, 引擎是可替换插件)
 
-架构约束: 6DOF 物理永远在 sim_core (PyBullet), **环境引擎的唯一职责是 `render(位姿) → 图像`** —
+架构约束 (v0.6 修订): **环境引擎的唯一职责是 `render(位姿) → 图像`** —
 `sim_core/camera.py` 按 Renderer 抽象实现, 换引擎只写新桥, 识别/制导代码零改动。
+6DOF 物理归属原约束为 "永远在 sim_core (PyBullet)"; 视觉侧确认 MuJoCo 后, 若物理
+亦由 MuJoCo 承载 (free joint + 每步注入气动力), 注入约定见问题清单 §2 — 待对齐会冻结。
 
 | 阶段 | 引擎 | 理由 |
 |---|---|---|
-| M1-M3 算法验证 (现在) | **PyBullet 内建渲染** | 零成本, ArUco/色块靶标足够, 可复现跑得快 |
+| M1-M3 算法验证 (现在) | **MuJoCo** (v0.6: 视觉侧确认; 原 PyBullet 内建渲染) | 零成本, ArUco/色块靶标足够, 可复现跑得快, RL 生态好 |
 | M4 鲁棒性对抗 | **Unity 2022 LTS** (socket/共享内存出图; Sentis 可内嵌识别模型) 或 **UE5 + Colosseum** (AirSim 系, `simGetImage` RPC) | 真实纹理/光照/遮挡逼出识别与制导的弱点 |
 | 上真机前工程化 | **Gazebo (gz-sim)** | 与 ROS 2 传感器接口同生态, camera topic 直迁 |
 | 1 | ~~Isaac Sim / Omniverse                                      | 可换选 |
@@ -230,6 +236,8 @@ python -m venv .venv
 pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 # requirements.txt 内容:
 #   pybullet==3.2.6
+#   (v0.6: 环境引擎切换 MuJoCo — 算法侧在 requirements 增加 mujoco 并自管版本;
+#    lookup_aero.py 仅依赖 numpy, 不受影响; pybullet 在物理归属确认前暂留)
 #   opencv-python==4.10.0.84
 #   numpy==1.26.4
 #   scipy==1.13.1
