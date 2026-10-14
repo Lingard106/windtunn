@@ -20,6 +20,18 @@ WindTunnelSuite/
 - 所有编译 bat 用 `%~dp0` 相对定位, 在任何 cwd 下双击均可编译。
 - `D:\WindTunnel3D` / `D:\FanSim3D` 旧位置已清空 (仅剩会话锁定的空壳, 可删)。
 
+## 数据分层 (2026-10-14, wt 工具)
+
+本地仓库只留**运算端** (代码/编译物/raw 输入); 大体积运行数据 (vtk 快照海, ~110G+) 归档到
+NAS vault (`WT3D_VAULT`), 本地 scratch 按需 pull 恢复。求解/渲染只读写本地盘, NAS 只做
+归档与分发 — 完整守则与迁移手册见 [docs/data-vault.md](docs/data-vault.md)。
+
+```bash
+bash wt/wt.sh doctor            # 体检 (NAS 挂载 + wt/wt.conf 配好即绿灯)
+bash wt/wt.sh push vtk --hash   # 跑完归档: 本地 fluidx3d/vtk → vault runs/
+bash wt/wt.sh pull vtk_<ts>     # 回看: vault → 本地原路径
+```
+
 ## 数据流 (风机-风洞耦合, ④号管线)
 
 ```

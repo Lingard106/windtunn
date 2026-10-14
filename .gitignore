@@ -60,3 +60,7 @@ desktop.ini
 guidance_sim/.venv/
 guidance_sim/records/
 __pycache__/
+
+# ==== wt 数据分层工具 (2026-10-14) ====
+wt/.logs/
+_pull/

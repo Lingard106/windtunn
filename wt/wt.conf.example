@@ -1,0 +1,7 @@
+# wt.conf -- WindTunnelSuite data-vault configuration
+# Copy this file to wt.conf (same dir) and set your NAS mount.
+# WT3D_VAULT accepts a mapped drive (Git Bash form) or a UNC path, e.g.:
+#   WT3D_VAULT=Z:/windtunnel-vault
+#   WT3D_VAULT=//nas/share/windtunnel-vault
+# The tool only ever writes inside <WT3D_VAULT>/windtunnel-suite/.
+# Environment variable WT3D_VAULT overrides this file.

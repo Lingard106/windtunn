@@ -12,6 +12,7 @@
 5. **数字必须实测提取**：devlog 与报告中的 Q/速度/力全部从日志文件提取，禁止凭记忆。
 6. **编码**：MATLAB 工具链脚本（render_of/slices_of 等）输出与注释遇中文经 shell 往返会乱码——新增渲染/批处理脚本注释用中文可以，但 **fprintf 输出与字符串拼接用 ASCII**；用 python 改 MATLAB 文件时字符串含 `\n` 字面量一律用 chr(92)+'n' 拼接。
 7. **自动会话结束前**：更新 §3 队列状态 → 写当日 devlog（devlog skill）→ 若有需曼波决策的事项写入 §6。
+8. **数据分层**（2026-10-14）：大体积运行数据（vtk 快照等）跑完即 `bash wt/wt.sh push <dir> --hash` 归档到 NAS vault；**求解/渲染只读写本地盘，禁止把 scratch 放 NAS/UNC 路径**；删除类操作仅限 `wt rm --yes`（本地）/`wt vault-rm`（点名确认）。手册：docs/data-vault.md。
 
 ## 1. 环境初始化（每次会话开工前执行）
 
@@ -24,6 +25,7 @@ cd ~/openfoam/windtunnel-mrf"
 # decomposeParDict 用 scotch (v12 的 hierarchical 需要 order 键, 已弃用该格式)
 ```
 - 基线 case (`windtunnel-base`) 若需运行：用 **v1912** + `FOAM_ETC=/usr/share/openfoam/etc WM_PROJECT_DIR=/usr/share/openfoam`（与 v12 冲突时分开两个会话跑）。
+- 数据 vault 体检：`bash wt/wt.sh doctor`（未配置 NAS 会给接线指引，见 docs/data-vault.md；vault 未配置时照常干活，只是别删本地 vtk 原件）。
 - case 真源在 `D:\WindTunnelSuite\openfoam\windtunnel-mrf\`（生成器输出），WSL 侧 `~/openfoam/windtunnel-mrf/` 是运行副本。改了生成器后需重建：MATLAB 跑 `gen_openfoam_mrf`（开关 `WT_MRF_OBJ=sphere|cylinder` 控制被测物）→ 同步到 WSL。
 
 ## 2. 当前项目状态快照（2026-10-06 #3 轮后）
@@ -42,13 +44,14 @@ cd ~/openfoam/windtunnel-mrf"
 |---|---|---|---|
 | T0 | 「全盒保留」排查 | ✅ 2026-10-06 结案：真凶=v12 reconstructParMesh 空壳（dict 无罪），修复=reconstructPar -noFields，详见 §4.2 | §4.2 |
 | T1 | 被测物 sphere 实测 | ✅ 2026-10-06：全链路通；健康窗 Q=0.6106/tsMean=10.37/Cd=0.113；~1720 步软发散（+4 skew faces）— 重跑验证挂 T3 后 | §4.1 |
-| T2 | 1180rpm 长跑补完 | ✅ 2026-10-06：3000 步收敛（过 1080 爆点 2862）Q=0.7522±0.016/Ux=12.78，风机律双锚点互证；**稳定图非单调修订** | §4.3 |
+| T2 | 1180rpm 长跑补完 | ✅ 2026-10-06：3000 步收敛（过 1080 爆点 2862）Q=0.7522±0.016/Ux=12.78，风机律双锚点互证；**稳定图非单调修订**；10-06 深夜 1200 步 warm start 复核 Q=0.746-0.766 一致（双跑互证闭环） | §4.3 |
 | T3 | skew faces 清理 | ✅ 2026-10-06 #4 轮收官: sphere 档重验完成（960rpm 2000 步, T3 收紧版 mesh）— Q=0.611/tsMean=10.39 与健康窗一致, **尖峰 170.7 仍在 → 界面伪影归因最终确认**（与转速/球档无关）; skew 清理收益=震荡带减半+Mesh OK, 定量可信度提升; 残留伪影处置挂 §7 | §4.3 |
 | T4 | 试验段横截面切片掩膜方向修复 | ✅ 2026-10-06：cnt2 转置修复+非对称网格单元测试实证+视觉验收 PASS | §4.4 |
 | T5 | GIF 输出：切片扫动动画 | ✅ 2026-10-06：slice_sweep.m 新增（114 帧 GIF 产出于 renders/of/2026-10-06_1180rpm/） | §4.5 |
 | T6 | Q 差距主攻 A：瞬态旋转可行性调研 | ✅ 2026-10-06：`docs/transient_rotation_plan.md`（两阶段：瞬态 MRF → createNonConformalCouples 真滑移；overset 无教程生态排除；核心洞察=790/1080 发散可能是稳态解存在性问题，瞬态可解锁扫掠） | §4.6 |
 | T7 | 3mm OF 交叉验证可行性评估（.wslconfig 扩内存 → 全域加密档位测算） | ⬜ | §4.7 |
 | T8 | 全量代码与结构审查 | 🔶 定向预审完成（probe_flow P1 坐标错位已修、sphere_run 弃用标注、extract_sweep legend 修复、fixline/.broken 归档）；剩 gen_openfoam_mrf.m 本体全量审计 | — |
+| T9 | 遗留数据 NAS 迁移（~101 GiB，wt migrate 计划已出） | ⬜ 等 §6 两项决策（NAS 挂载 / vtk_old_inline 处置）后 `bash wt/wt.sh migrate --exec` | docs/data-vault.md §2 |
 
 **完成 T1-T4 后**（预计全部核心管线闭环），回到本表追加下阶段任务（头脑风暴产出，见 §7）。
 
@@ -90,10 +93,12 @@ cd ~/openfoam/windtunnel-mrf"
 - 数字从日志实测提取（grep outletQ/tsMean 末段均值），禁止估算。
 - 需要曼波决策的事项 → 本文件 §6。
 - 渲染出图存 `D:\WindTunnelSuite\renders\of\<日期_内容>\`（**禁止放 case 内的 VTK/——生成器 rmdir 重建 case 会连渲染产物一起删，2026-10-06 抢救过一次**）。
+- 大体积 run 产物（vtk 快照海）跑完收敛数据提取后：`bash wt/wt.sh push <dir> --hash` 归档，再视空间 `wt rm <name> --yes` 清本地（vault 未配置前跳过 push、保留本地原件）。
 
 ## 6. 待曼波决策（QUESTIONS）
 
-- （空）
+- **NAS 接线**：把 NAS 共享映射成盘符（如 `net use Z: \\<nas>\<share>`），`wt/wt.conf` 写 `WT3D_VAULT=Z:/windtunnel-vault`（或告诉我地址我来配）。配好后 `bash wt/wt.sh migrate --exec` 即完成 ~101 GiB 数据上 NAS（计划：70G 现役 vtk → runs/，31G 旧代+渲染源 → archive/）。
+- **vtk_old_inline（43G）处置**：P0 修复前损坏快照旧存档，已定性不可信、不迁移。确认无用我就本地删掉（回收 D 盘 43G）；要留也可以原样推 vault archive/。
 
 ## 7. 下阶段头脑风暴备忘（种子，供后续生长）
 
