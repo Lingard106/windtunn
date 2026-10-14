@@ -9,10 +9,10 @@ FoamFile
 application     foamRun;
 solver          incompressibleFluid;
 
-startFrom       startTime;
+startFrom       latestTime;
 startTime       0;
 stopAt          endTime;
-endTime         3000;
+endTime         3200;
 
 deltaT          1;
 

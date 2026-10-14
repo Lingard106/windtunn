@@ -1,0 +1,11 @@
+forces
+{
+    type            forces;
+    libs            ("libforces.so");
+    writeControl    writeTime;
+    patches         (testobj);
+    rho             rhoInf;
+    rhoInf          1.2;
+    CofR            (1.25 0 0);
+    pitchAxis       (0 1 0);
+}

@@ -227,7 +227,9 @@ fprintf('impeller.stl: %d 面片 | 叶片 r∈[%.1f, %.1f]mm tB_eff=%.1fmm\n', .
 %% ==================== STL: 被测物 (可选) ====================
 % 被测物接口: OBJ='none'|'sphere'|'cylinder', 与 FluidX3D 耦合管线同参数位 (cTs=1.25)
 % sphere: r=OBJ_R 球 @ (OBJ_C,0,0); cylinder: 轴沿 y 贯穿, 圆截面 r=OBJ_R @ xz=(OBJ_C,0)
-objEnv = getenv('WT_MRF_OBJ'); if isempty(objEnv), objEnv = 'none'; end
+% 【已知限制】OBJ='none' 时 0/ 场仍引用 skin_* patch 名 → solve 会崩;
+%   none 档需另出无前缀 0/ 场模板 (待办)。当前任务线固定 sphere 档。
+objEnv = getenv('WT_MRF_OBJ'); if isempty(objEnv), objEnv = 'sphere'; end
 OBJ   = objEnv;        % ← 改 'sphere'/'cylinder' 启用
 OBJ_R = 0.030;
 OBJ_C = 1.25;          % = (xSec(3)+xSec(4))/2, 与 export_fluidx3d_fan 的 cTs 同位
