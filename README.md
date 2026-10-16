@@ -1,16 +1,49 @@
-# WindTunnelSuite — 桌面风洞 + 离心风机 套件
+# WindTunnelSuite — 双线套件: 桌面风洞 CFD + 制导闭环全仿真
 
-风洞 ([WindTunnel3D](WindTunnel3D/README.md)) 与其供风风机 ([FanSim3D](FanSim3D/)) 的联合工程。
-两个项目在此**同级并列**, 相互以「套件相对定位」引用 — 整个 `WindTunnelSuite/` 文件夹
+**新读者导读** (按身份选线):
+- **视觉/算法侧 (制导闭环项目)** → 先读 [制导闭环全仿真线](#制导闭环全仿真线-2026-10-08-起) 一节;
+- 风洞 CFD 线 → 从 [风洞 CFD 线](#风洞-cfd-线) 往下读。
+
+风洞 ([WindTunnel3D](WindTunnel3D/README.md)) 与其供风风机 ([FanSim3D](FanSim3D/)) 的联合工程,
+自 2026-10-08 起扩展承载**制导闭环全仿真**项目 (MuJoCo 闭环 + CFD 侧气动数据集)。
+各项目同级并列, 相互以「套件相对定位」引用 — 整个 `WindTunnelSuite/` 文件夹
 挪到任何盘任何路径都可直接使用, 无需改代码。
 
 ```
 WindTunnelSuite/
 ├── README.md            ← 本文件 (套件总览)
+├── docs/                跨线文档 (制导对接 spec / 控制路线 / 数据 vault 手册)
+├── guidance_sim/        制导线: 闭环仿真 (MuJoCo 环境 + 识别/制导/评估)
+├── openfoam/            OpenFOAM case: windtunnel-base / windtunnel-mrf / airframe-sweep (制导线气动库)
 ├── WindTunnel3D/        风洞: 1D 设计 → MATLAB 体素化 → FluidX3D GPU LBM → 可视化/报告
 │                        (共享工具 read_fluidx3d_vtk.m 在其根目录, FanSim3D 经定位器引用)
 └── FanSim3D/            风机: 1D 性能模型 → 几何/体素化 → FluidX3D → 可视化
 ```
+
+## 制导闭环全仿真线 (2026-10-08 起)
+
+**视觉/算法侧同学从这里开始。** 闭环仿真 (目标识别 + 制导律, 500 Hz 主循环 / 30 Hz 视觉)
+在 MuJoCo 环境里跑; CFD 侧 (仿真数据集) 交付气动数据库 `aero_table.csv` + 查表参考实现 +
+参数化几何。文档链按序读:
+
+| 顺序 | 文档 | 内容 |
+|---|---|---|
+| 1 | [docs/guidance_loop_dev_spec.md](docs/guidance_loop_dev_spec.md) | **对接主文档 (v0.7)**: 接口规范 / 坐标系约定 / 里程碑与验收 |
+| 2 | [docs/control_approach_roadmap.md](docs/control_approach_roadmap.md) | 控制方案路线: B (PN+PID 参数枚举) 主线保底 / A (swarm 端到端 RL) M4+ 增益蒸馏 |
+| 3 | [docs/mujoco_alignment_questions.md](docs/mujoco_alignment_questions.md) | MuJoCo 切换对齐问题清单 (待算法侧逐条回复) |
+| 4 | [guidance_sim/README.md](guidance_sim/README.md) | 仓库代码: sim_core / detector / guidance / eval (Phase 0 全链路跑通) |
+| 5 | [openfoam/airframe-sweep/README.md](openfoam/airframe-sweep/README.md) | CFD 侧工作区: 参数化几何生成器 + STL/MJCF 产物 + 数据集登记 |
+
+- **环境**: Python venv + MuJoCo (外部仿真环境统一 MuJoCo, spec v0.7), 自举步骤见
+  guidance_sim/README.md; CFD 交付物 (aero_table / lookup_aero) 纯 numpy, 引擎无关。
+- **CFD 侧已交付并验证**: `openfoam/airframe-sweep/geometry/glider.mjcf` 经 MuJoCo 3.16
+  实测加载 (惯量逐位一致 + 3s 自由落体解析解吻合); `guidance_sim/aero/lookup_aero.py`
+  自测 6/6。待冻结会后扫气出 `aero_table.csv`。
+
+## 风洞 CFD 线
+
+风洞-风机耦合管线 (FluidX3D GPU LBM)、OpenFOAM CPU 稳态管线、数据分层 (wt 工具) —
+以下各节均为风洞线内容。
 
 ## 路径约定 (2026-09-30 套件化)
 
