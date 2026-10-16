@@ -1,6 +1,7 @@
 # 制导闭环全仿真链路 — 算法对接技术开发文档
 
-> 版本 v0.6 (2026-10-14) | 注记仅记录需求与设计变更, 措辞润色不计入 |
+> 版本 v0.7 (2026-10-16) | 注记仅记录需求与设计变更, 措辞润色不计入 |
+> v0.7: 视觉侧确认**外部仿真环境统一 MuJoCo** (物理+渲染, PyBullet 退役); 控制方案双路线记录 — B (PN+PID 参数枚举) 主线保底 / A (swarm 端到端 RL) M4+ 增益蒸馏, 推荐三步走与 CFD 侧硬约束见 `docs/control_approach_roadmap.md`。
 > v0.6: 视觉侧确认环境引擎选用 **MuJoCo** — §5.1.1 选型表 M1-M3 阶段由 PyBullet 内建渲染改为 MuJoCo; 6DOF 物理归属 (sim_core 保留 vs MuJoCo 承载) 与气动力注入约定待对齐会确认, 问题清单见 `docs/mujoco_alignment_questions.md`; **CFD 侧交付物 (§4.1 aero_table.csv / lookup_aero) 引擎无关, 不受此变更影响**。
 > v0.5: sim_core/虚拟相机/占位识别与制导已实现 (Phase 0, 见 guidance_sim/README); 补 los_Bp 注入约定 (§4.5.2); T_WC 已实现。
 > v0.4: 补 §4.5.1-4.5.3 控制链路/视觉链路/咬合验证。
@@ -200,9 +201,9 @@ monte_carlo(n=1000, guidance=YourGuidance, detector=YourDetector)
 
 - **主线 = Python 3.11 + OpenCV + numpy/scipy** (方案 C):
   闭环 500Hz 单核可跑, 虚拟相机原生, 单机夜间可完成数千发 Monte Carlo。
-  **v0.6: 环境引擎由 PyBullet 内建改为 MuJoCo (视觉侧确认)** — 气动查表参考实现
-  (`lookup_aero.py`) 为纯 numpy, 引擎无关; 6DOF 物理归属与气动力注入约定待对齐会
-  (`docs/mujoco_alignment_questions.md`) 确认后, 本节与 §4 相应条目随之更新。
+  **v0.7: 外部仿真环境统一 MuJoCo (视觉侧确认; 物理+渲染, PyBullet 退役)** — 气动查表参考实现
+  (`lookup_aero.py`) 为纯 numpy, 引擎无关; 气动力注入约定细节 (`docs/mujoco_alignment_questions.md` §2)
+  冻结会后回写。控制方案双路线 (参数枚举主线 / swarm RL 增益) 见 `docs/control_approach_roadmap.md`。
 - 备选已评审: MATLAB/Simulink(控制验证), Unity/ML-Agents(展示/RL), Gazebo/ROS2(上真机前工程化) —
   接口语义与 §4 一致, 需要时再做桥接, **算法逻辑零重写**。
 
@@ -294,7 +295,7 @@ D:\WindTunnelSuite\
 | M1 | 识别模块单元测试 (录制的 500 帧序列) | 检测率 ≥99%, 抖动 ≤2px, ≤20ms/帧 |
 | M2 | 制导律闭环 (无风无扰) | 命中率 100% (n≥20), 舵面不持续饱和 |
 | M3 | Monte Carlo 1000 发 (扰动+风) | CEP ≤ 指标值 (Phase 0 定), 无发散弹道 |
-| M4 | 对抗性 (靶标移动/光照变化, 可选) | 双方商定 |
+| M4 | 对抗性 (靶标移动/光照变化, 可选) + swarm RL 增益蒸馏入口 (roadmap §3 Step 2) | 双方商定 |
 
 ## 8. 责任矩阵与对接清单
 

@@ -1,6 +1,8 @@
 # guidance_sim — 制导闭环全仿真 (Phase 0)
 
-对接文档: `../docs/guidance_loop_dev_spec.md` (v0.4, 接口以文档为准)
+对接文档: `../docs/guidance_loop_dev_spec.md` (v0.7, 接口以文档为准)
+控制方案路线: `../docs/control_approach_roadmap.md` (B 参数枚举主线 / A swarm RL 增益, 三步走)
+环境引擎: **MuJoCo** (视觉侧确认, v0.7); MuJoCo 对齐清单: `../docs/mujoco_alignment_questions.md`
 
 ## 快速开始
 
