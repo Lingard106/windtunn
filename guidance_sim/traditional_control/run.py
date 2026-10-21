@@ -144,8 +144,8 @@ def main(argv=None):
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--compare-v1", action="store_true", help="Paired original-v1 control with the same seed and repaired real-vision tracker")
     parser.add_argument("--duration", type=float, default=2.6)
-    parser.add_argument("--output", type=Path, default=PROJECT/"outputs/traditional_control")
-    parser.add_argument("--trace", action="store_true", help="Write detailed per-step JSON in headless mode")
+    parser.add_argument("--output", type=Path, help="Explicit headless result directory; defaults to no files")
+    parser.add_argument("--trace", action="store_true", help="Write detailed per-step JSON with --headless and --output")
     parser.add_argument("--auto-run", action="store_true")
     parser.add_argument("--auto-close", type=float)
     parser.add_argument("--flight-control", choices=("on", "off"), default="on")
@@ -170,6 +170,10 @@ def main(argv=None):
             parser.error(f"Invalid --{key.replace('_', '-')}")
     if (args.seeds or args.compare_v1 or args.trace) and not args.headless:
         parser.error("--seeds, --compare-v1 and --trace require --headless")
+    if args.output is not None and not args.headless:
+        parser.error("--output requires --headless")
+    if args.trace and args.output is None:
+        parser.error("--trace requires --output")
     paths = resolve_startup_paths(args.config, args.scene or available_scenes()["2027"], args.dart, args.launch)
     settings = VisionSettings(**json.loads(args.vision_config.read_text(encoding="utf-8-sig")))
 
@@ -229,10 +233,11 @@ def main(argv=None):
                     root.destroy()
         return 0
 
-    args.output.mkdir(parents=True, exist_ok=True)
     seeds = args.seeds or [args.target_seed]
     if len(seeds) != len(set(seeds)):
         parser.error("Duplicate seeds are not independent evaluation rounds")
+    if args.output is not None:
+        args.output.mkdir(parents=True, exist_ok=True)
     variants = {"predictive": []}
     if args.compare_v1:
         variants["baseline_v1_same_vision"] = []
@@ -266,7 +271,8 @@ def main(argv=None):
             report = dict(manifest=manifest, complete=all(len(value)==len(seeds) for value in variants.values()),
                           results={key: dict(summary=summarize(value), runs=value)
                                                     for key, value in variants.items()})
-            (args.output/"result.json").write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+            if args.output is not None:
+                (args.output/"result.json").write_text(json.dumps(report, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
             print(json.dumps(dict(variant=name, seed=seed, hit=result["hit"], error=result.get("error"),
                                   summary=summarize(runs)), ensure_ascii=False), flush=True)
     return int(any("error" in row for rows in variants.values() for row in rows))

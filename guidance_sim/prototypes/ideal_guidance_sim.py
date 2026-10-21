@@ -800,13 +800,16 @@ class IdealViewer(DartViewer):
         self._flight_tuning_panel = type("IdealPanel", (), {"close": staticmethod(close)})()
 
 
-def run_headless(sim, duration, output, settings):
-    output.mkdir(parents=True, exist_ok=True)
+def run_headless(sim, duration, output, settings, *, trace=False):
+    if trace and output is None:
+        raise ValueError("trace requires an output directory")
+    if output is not None:
+        output.mkdir(parents=True, exist_ok=True)
     tracker = OpenMVTracker(settings) if sim.guidance_source == "vision" else None
     clock = SampleClock(90.)
     clock.reset(sim.t)
     vision_count = detected = 0
-    trace = []
+    rows = []
     max_requested_g = max_realized_g = 0.
     if tracker is not None:
         details = sample_flight_vision(sim, tracker)
@@ -821,8 +824,9 @@ def run_headless(sim, duration, output, settings):
         control = obs["flight_control"]["control"]
         max_requested_g = max(max_requested_g, math.hypot(control["a_cmd_pitch_g"], control["a_cmd_yaw_g"]))
         max_realized_g = max(max_realized_g, obs["flight_control"]["realized_control_norm_g"])
-        trace.append(dict(t=sim.t, p_W=obs["p_W"].tolist(), v_W=obs["v_W"].tolist(),
-                          flight_control=obs["flight_control"]))
+        if trace:
+            rows.append(dict(t=sim.t, p_W=obs["p_W"].tolist(), v_W=obs["v_W"].tolist(),
+                             flight_control=obs["flight_control"]))
     obs = sim.observation()
     result = dict(engine=sim.engine_label, model=sim.flight_control_metadata,
         guidance_source=sim.guidance_source, duration_s=sim.t, status=sim.status,
@@ -833,8 +837,10 @@ def run_headless(sim, duration, output, settings):
         final_flight_control=obs["flight_control"])
     result["max_requested_norm_g"] = max_requested_g
     result["max_realized_control_norm_g"] = max_realized_g
-    (output/"result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
-    (output/"trace.json").write_text(json.dumps(trace, ensure_ascii=False)+"\n", encoding="utf-8")
+    if output is not None:
+        (output/"result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+        if trace:
+            (output/"trace.json").write_text(json.dumps(rows, ensure_ascii=False)+"\n", encoding="utf-8")
     print(json.dumps(dict(source=sim.guidance_source, t_s=sim.t, status=sim.status,
                          target=sim.target_result,
                          max_requested_norm_g=max_requested_g,
@@ -845,7 +851,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--headless", action="store_true")
     parser.add_argument("--duration", type=float, default=2.6)
-    parser.add_argument("--output", type=Path, default=PROJECT/"outputs/ideal_guidance")
+    parser.add_argument("--output", type=Path, help="Explicit headless result directory; defaults to no files")
+    parser.add_argument("--trace", action="store_true", help="Write detailed per-step JSON with --headless and --output")
     parser.add_argument("--guidance-source", choices=("vision", "truth"), default="vision")
     parser.add_argument("--guidance-law", choices=("ballistic_pn", "classical_pn"))
     parser.add_argument("--aim-reference-config", type=Path)
@@ -867,6 +874,10 @@ def main(argv=None):
     parser.add_argument("--target-mode", choices=("fixed", "random_fixed", "random_moving", "end_moving"), default="fixed")
     parser.add_argument("--target-seed", type=int, default=2027)
     args = parser.parse_args(argv)
+    if args.output is not None and not args.headless:
+        parser.error("--output requires --headless")
+    if args.trace and (not args.headless or args.output is None):
+        parser.error("--trace requires --headless and --output")
     if not math.isfinite(args.duration) or args.duration <= 0:
         parser.error("--duration must be positive")
     if not math.isfinite(args.yaw_offset_deg):
@@ -899,7 +910,7 @@ def main(argv=None):
         numeric["t_max_s"] = max(numeric["t_max_s"], args.duration)
         sim.reset(numeric)
         if args.headless:
-            run_headless(sim, args.duration, args.output, settings)
+            run_headless(sim, args.duration, args.output, settings, trace=args.trace)
         else:
             import tkinter as tk
             root = tk.Tk()

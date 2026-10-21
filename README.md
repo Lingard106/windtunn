@@ -1,77 +1,52 @@
-# 飞镖制导仿真 — 经典控制验证（制导线）
+# WindTunnelSuite 工作区与交接入口
 
-本仓库是 WindTunnelSuite 制导线的**独立精简仓**：只保留视觉/算法侧的仿真、验收与固件移植参考代码。
-风洞 CFD 线、Phase 0 占位骨架等协作方内容不在本分支；接口契约与数据契约以本仓文档为准。
+整理日期：2026-10-21。此目录包含仿真程序、固件参考示例、运行资源、历史实验结果和原始 CAD 资料。
 
-## 入口一览
+**接手先读 [交接总览](docs/交接总览.md)，运行前读 [环境与运行](docs/环境与运行.md)。** 原 README 的完整内容已保存到 [历史运行说明（截至 2026-10-20）](docs/历史运行说明_2026-10-20.md)，其中的实验成绩与界面验收属于历史记录。
 
-| 启动器 | 验证内容 | 配置文件 | 定位 |
-|---|---|---|---|
-| **`启动传统控制增强版.cmd`** | 完整刚体物理 + 视觉上靶面估计 + 弹道预测 ZEM/PN + 俯仰/偏航过载 PID + 滚转 P | `guidance_sim/traditional_control/config.json` | **当前推荐主线** |
-| `启动v1实跑参数.cmd` | 原 MuJoCo 刚体 + 视线角速率 PNG(N=10) + 三回路自驾 + 舵机/气动 | `guidance_sim/profiles/flight_control_v1_direct_2027.json` | 原方案对照 |
-| `启动理想导引仿真.cmd` | 传统 N10 对照，有限过载质点 | `guidance_sim/profiles/ideal_guidance.json` | 几何过面检查 |
-| `启动PN专家v2.cmd` | 弹道预测改进 PN（质点模型） | `guidance_sim/pn_expert_v2/config.json` | 导引律实验 |
-| `启动参考微调v3.cmd` | 红十字参与靶面微调，可切回仅显示 | `guidance_sim/learning/aim_reference.json` | 标定实验 |
-| `采集PN专家数据.cmd` | 批量随机工况专家采样，生成 SL 数据集 | `guidance_sim/learning/config.json` | 数据生产（不训练） |
+## 各部分文档
 
-**参数与成绩不可跨入口混用**：某入口的成绩只对应它自己的 `config.json`；把增强版 PID 数字填进 v1 入口
-不能复现增强版结果。
-
-## 关键验收结果
-
-| 对象 | 结果 | 边界 |
+| 部分 | 交接文档 | 用途 |
 |---|---|---|
-| 传统控制增强版，联合公差 64 发（seeds 5101–5164） | **64/64 命中**；同视觉原 v1 为 3/64；95% Wilson 94.34%–100%；接触点到靶心均值 20.31 mm / P95 23.12 mm | 质量 ±1% / 初速 ±0.1 m/s / 离架 roll ±1° / Cd ±5%，横风 0；属**换位后静止命中** |
-| PN专家v2，29 组真实视觉工况 | 29/29 命中；同初值关控对照 3/29；最大偏靶 1.516 mm | 固定目标；XYZ ±5 cm、侧风 ±1 m/s 等局部扰动 |
+| 仿真工程 | [guidance_sim](guidance_sim/README.md) | 运行入口、模块关系与数据流 |
+| 共用仿真与界面 | [prototypes](guidance_sim/prototypes/README.md) | 原物理入口、简化入口、视觉、显示与诊断 |
+| 独立传统增强分区 | [traditional_control](guidance_sim/traditional_control/README.md) | 独立入口和完整配置 |
+| 四发连续演示 | [four_shot_demo](guidance_sim/four_shot_demo/README.md) | 复用原单发传统控制窗口，增加自动换发和一行计分，默认不写文件 |
+| 简化模型专家分区 | [pn_expert_v2](guidance_sim/pn_expert_v2/README.md) | 专家代码与配置的边界 |
+| 参考设置与数据采集 | [learning](guidance_sim/learning/README.md) | 采集器、数据格式与历史导出区别 |
+| 配置 | [profiles](guidance_sim/profiles/README.md) | 场地、物性、视觉和入口对应关系 |
+| 运行资产 | [assets](guidance_sim/assets/README.md) | 必需网格、来源和清单 |
+| 来源元数据 | [reference](guidance_sim/reference/README.md) | 原件哈希与来源记录 |
+| 仿真输出与历史资料 | [outputs](guidance_sim/outputs/README.md) | 显式保存位置、数据采集与六组历史基线 |
+| 固件参考示例 | [firmware_examples](firmware_examples/README.md) | 示例范围、平台依赖与未接入部分 |
+| STM32 实际工程 | [Guidedemo](Guidedemo/README.md) | 后续加入的工程结构、源码与历史构建产物说明 |
+| 原始 CAD 资料 | [local_originals](local_originals/README.md) | 原件保管与资源关系 |
 
-均为**模型内**结果，不代表实机性能。完整边界见 [`docs/classical_control_handoff.md`](docs/classical_control_handoff.md) §6。
+现有专题说明保留在原位置：[控制策略与 OpenMV／STM32 移植说明](控制策略与OpenMV_STM32移植说明.md)。其原有技术内容未在本次整理中改写。
 
-## 快速开始
+## 运行入口
 
-首次安装（在本目录打开 PowerShell，使用带 Tkinter 的 Python 3.11）：
+本次整理的六个既有入口中，根目录保留两个常用入口，其余四个对照或实验入口集中在[启动器目录](启动器/README.md)。六个入口均使用 `guidance_sim/.venv/Scripts/python.exe`，支持转发命令行参数。旧名称已移除，没有保留重复别名。
 
-```powershell
-py -3.11 -m venv guidance_sim/.venv
-.\guidance_sim\.venv\Scripts\python.exe -m pip install -r guidance_sim/requirements.txt
-```
+| 启动器 | 原有用途 |
+|---|---|
+| [启动器/运行基线物理仿真.cmd](启动器/运行基线物理仿真.cmd) | 原完整物理仿真入口 |
+| [运行传统控制仿真.cmd](运行传统控制仿真.cmd) | 独立传统增强分区入口 |
+| [启动器/运行标准导引仿真.cmd](启动器/运行标准导引仿真.cmd) | 简化运动模型对照入口 |
+| [启动器/运行专家策略仿真.cmd](启动器/运行专家策略仿真.cmd) | 简化模型专家入口 |
+| [启动器/运行参考点微调仿真.cmd](启动器/运行参考点微调仿真.cmd) | 带参考设置的简化入口 |
+| [采集专家示范数据.cmd](采集专家示范数据.cmd) | 批量数据采集入口，会新增输出 |
 
-之后双击任一启动器即可。窗口内支持暂停、重置、调参、切换目标模式与回放。
+四发演示使用[启动四发赛场演示.cmd](启动四发赛场演示.cmd)，直接复用原单发传统控制窗口，仅增加连续换发与一行计分。代码只保留`four_shot_demo/run.py`，默认不写文件；此前的回放窗口和临时产物已撤掉。
 
-## 目录结构
+上述入口均为仿真方案。`firmware_examples` 仍是参考示例，后续加入的 `Guidedemo` 是实际 STM32 工程，本次未修改其控制代码。当前未见训练器或神经网络模型交付。
 
-```
-.
-├── README.md                      ← 本文件（总览与导航）
-├── docs/
-│   ├── classical_control_handoff.md            对接文档: 接口/数据/配置契约、验收边界、上板七步
-│   └── control_strategy_and_firmware_porting.md 移植说明: 固件现状核对与 OpenMV/STM32 改法
-├── guidance_sim/
-│   ├── prototypes/               共用运行与验证代码（渲染/物理/视觉/自驾/回放/诊断）
-│   ├── traditional_control/      传统控制增强版（当前推荐主线）
-│   ├── pn_expert_v2/             弹道预测专家
-│   ├── learning/                 标定参考与 SL 数据采集
-│   ├── profiles/                 v1 飞控、理想导引、场地与视觉配置
-│   ├── assets/                   运行必需 STL/OBJ 与清单
-│   ├── reference/                来源哈希元数据
-│   └── README_lite.md            运行手册（逐项参数与诊断结论）
-├── firmware_examples/            OpenMV / STM32 移植参考代码
-├── devlog/                       开发日志（按日）
-└── 启动*.cmd / 采集PN专家数据.cmd  六个入口
-```
+## 交接配套资料
 
-## 文档索引
+- [环境与运行](docs/环境与运行.md)：本机已核对版本、环境重建方法、启动注意点。
+- [输出规范](docs/输出规范.md)：默认不落盘、显式结果/CSV/轨迹开关与采样文件契约。
+- [工作区文件清单](docs/工作区文件清单.md)：整理前文件数、体积与逐文件清单。
+- [整理记录](docs/整理记录.md)：改动范围、保留规则和检查结果。
+- [交接清单 JSON](docs/交接清单_2026-10-21.json)：原文件清单与 SHA-256 基线。
 
-- **要接这套仿真** → [`docs/classical_control_handoff.md`](docs/classical_control_handoff.md)：坐标符号、频率预算、观测量与输出边界、通信协议、31 维数据契约、验收边界、上板七步。
-- **要上板移植** → [`docs/control_strategy_and_firmware_porting.md`](docs/control_strategy_and_firmware_porting.md)：固件现状逐项核对、OpenMV/STM32 改动清单与示例代码。
-- **要跑、要调参** → [`guidance_sim/README_lite.md`](guidance_sim/README_lite.md)：全部入口的运行手册与逐项诊断结论。
-
-## 数据与 Git 边界
-
-- 入库：源码、配置、文档、`guidance_sim/assets/` 的 STL/OBJ 运行资产、`firmware_examples/`。
-- 不入库：`guidance_sim/outputs/`（验收报告、截图、NPZ 数据集）、`.venv/`、`__pycache__/`、`local_originals/`（约 1.1 GB 原始 CAD）。
-- `assets/` 之所以对 `*.stl` / `*.obj` 破例进库，是因为它们是**运行输入**而非可再生产物。
-
-## 已知边界
-
-气动与舵效为工程估计；几何接触命中不等同官方裁判识别；导航、相机内外参与时延、IMU 安装标度、
-AHRS 飞行精度、HIL 与末端持续移动均未验收。**仿真成绩不能解释为实机命中率。**
+当前根目录没有 `.git`；`.gitignore` 和 `.gitattributes` 只是保留的规则文件。交接时需单独确认包含 `local_originals/` 和 `guidance_sim/outputs/` 的资料副本，不能据忽略规则推断它们已经备份。

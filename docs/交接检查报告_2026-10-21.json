@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-21",
+  "scope_exclusions": [
+    ".venv",
+    "__pycache__",
+    ".git"
+  ],
+  "protected_file_count": 991,
+  "original_content_matches": 991,
+  "original_content_failures": [],
+  "original_readme_archive_matches": true,
+  "intentional_changes": {
+    "root_readme": "navigation rewrite; exact original archived",
+    "launchers": [
+      {
+        "old_path": "启动传统控制增强版.cmd",
+        "new_path": "运行传统控制仿真.cmd",
+        "sha256_after": "d5d9a5519e5ac6ed805467d9f11493be1fe7d122ae6a1912de203763f4912a92",
+        "path_adapter_added": false
+      },
+      {
+        "old_path": "采集PN专家数据.cmd",
+        "new_path": "采集专家示范数据.cmd",
+        "sha256_after": "61b30771f9251dc3786869bee2eca94e9920d0f0a425bec8823b28effa00496f",
+        "path_adapter_added": false
+      },
+      {
+        "old_path": "启动v1实跑参数.cmd",
+        "new_path": "启动器/运行基线物理仿真.cmd",
+        "sha256_after": "7ab85734dc62b7a13e5862543449ff207bc62646492f43e95e0b7a59f5e9b6c4",
+        "path_adapter_added": true
+      },
+      {
+        "old_path": "启动理想导引仿真.cmd",
+        "new_path": "启动器/运行标准导引仿真.cmd",
+        "sha256_after": "2cafdbe5324e39e69e3c1bdecea9c2516aedb4f84a127b392ba98969ad4ca0f7",
+        "path_adapter_added": true
+      },
+      {
+        "old_path": "启动PN专家v2.cmd",
+        "new_path": "启动器/运行专家策略仿真.cmd",
+        "sha256_after": "2aec6385a427e8818ee3bc482c849f28ea8a2050771114299b3e218087e0c13b",
+        "path_adapter_added": true
+      },
+      {
+        "old_path": "启动参考微调v3.cmd",
+        "new_path": "启动器/运行参考点微调仿真.cmd",
+        "sha256_after": "41ccaadf703bc5ea3caa7be9d0e7dbfd20344245adc63a9f2bdebcc2929e2465",
+        "path_adapter_added": true
+      }
+    ],
+    "control_guide": "launcher names and update note only; exact original archived"
+  },
+  "managed_markdown_count": 31,
+  "managed_markdown": [
+    "README.md",
+    "docs/README.md",
+    "docs/交接总览.md",
+    "docs/工作区文件清单.md",
+    "docs/整理记录.md",
+    "docs/环境与运行.md",
+    "firmware_examples/README.md",
+    "guidance_sim/README.md",
+    "guidance_sim/assets/README.md",
+    "guidance_sim/assets/dart_shenda/README.md",
+    "guidance_sim/assets/field_2027_lite/README.md",
+    "guidance_sim/assets/guide_light_2027/README.md",
+    "guidance_sim/assets/target_2027/README.md",
+    "guidance_sim/four_shot_demo/README.md",
+    "guidance_sim/learning/README.md",
+    "guidance_sim/outputs/README.md",
+    "guidance_sim/outputs/diagnosis/README.md",
+    "guidance_sim/outputs/expert_dataset/README.md",
+    "guidance_sim/outputs/four_shot_demo/README.md",
+    "guidance_sim/outputs/pn_expert_acceptance/README.md",
+    "guidance_sim/outputs/traditional_limit/README.md",
+    "guidance_sim/outputs/v1_debug_design/README.md",
+    "guidance_sim/outputs/v1_ui_refinement/README.md",
+    "guidance_sim/pn_expert_v2/README.md",
+    "guidance_sim/profiles/README.md",
+    "guidance_sim/prototypes/README.md",
+    "guidance_sim/reference/README.md",
+    "guidance_sim/traditional_control/README.md",
+    "local_originals/README.md",
+    "local_originals/制导镖机械图纸/README.md",
+    "启动器/README.md"
+  ],
+  "local_links_checked": 294,
+  "link_issues": [],
+  "format_issues": [],
+  "launcher_help_all_pass": true,
+  "environment_check": {
+    "python": "3.11.9",
+    "tk": "8.6",
+    "requirements_versions_match": true,
+    "pip_check": "No broken requirements found."
+  },
+  "not_rerun": [
+    "simulation",
+    "GUI rendering",
+    "sampling",
+    "training",
+    "firmware build or flashing"
+  ],
+  "all_pass": true,
+  "guide_check_note": "专题原文归档哈希与基线一致；当前专题按文本核对，仅允许既定入口更名与更新说明，换行符按Windows文本读写归一化。",
+  "parallel_additions_snapshot": {
+    "total_files_at_first_check": 358,
+    "groups": {
+      "guidance_sim/four_shot_demo": 5,
+      "guidance_sim/outputs/four_shot_demo": 352,
+      "启动四发赛场演示.cmd": 1
+    },
+    "note": "并行文件持续更新，此项只登记第一次检查观察值；不纳入本次991文件原始基线或功能验收。"
+  },
+  "checked_at_beijing": "2026-10-21T12:47:54+08:00"
+}

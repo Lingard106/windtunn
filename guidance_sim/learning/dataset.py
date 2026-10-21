@@ -376,9 +376,6 @@ def collect(config, output):
         vision_settings=settings.as_dict(), expert_profile=profile,
         source_hashes_before=hashes, episode_plan=plan, episodes=[])
     _write_json(output/"manifest.json", manifest)
-    _write_json(output/"collection_config.json", config)
-    _write_json(output/"vision_config.json", settings.as_dict())
-    _write_json(output/"aim_reference_config.json", reference_config)
     sim = None
     try:
         sim = IdealSimulation(load_config(paths.config), paths.scene, paths.dart, paths.launch,
@@ -424,8 +421,8 @@ def collect(config, output):
             trusted_sample_count=sum(row["trusted_samples"] for row in manifest["episodes"]),
             splits=reports, sources_unchanged=unchanged,
             limitations="Local fixed-target envelope, perfect self-state, static CAD prior, constant unknown crosswind, assumed control authority; no NN has been trained.")
+        manifest["summary"] = report
         _write_json(output/"manifest.json", manifest)
-        _write_json(output/"report.json", report)
         if not unchanged:
             raise RuntimeError("Sources/configurations changed during collection; this run is invalid")
         return report

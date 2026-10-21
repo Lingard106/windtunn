@@ -1254,8 +1254,8 @@ class DemoSimulation:
                 setattr(self, name, None)
 
 
-def main():
-    """无窗口运行一小段仿真，保存同一时刻的双画面和可追溯报告。"""
+def main(argv=None):
+    """无窗口运行并打印结果；显式指定输出时只保存数值文件。"""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--scene", type=Path, help="场地 manifest.json；省略时自动寻找默认场地")
@@ -1270,9 +1270,12 @@ def main():
     parser.add_argument("--flight-config", type=Path, help="可选飞控/舵机/估计舵效配置JSON")
     parser.add_argument("--imu-noise-scale", type=float,
                         help="IMU噪声倍率，0关闭、正数开启；省略时使用飞控配置")
-    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parents[1]/"outputs"/"dart_demo")
+    parser.add_argument("--output", type=Path, help="显式保存结果的目录；省略时只打印，不写文件")
+    parser.add_argument("--trace", action="store_true", help="配合 --output 保存详细数值轨迹")
     parser.add_argument("--duration", type=float, default=.6)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    if args.trace and args.output is None:
+        parser.error("--trace requires --output")
     if __package__:
         from .simulation_setup import resolve_startup_paths
     else:
@@ -1292,18 +1295,17 @@ def main():
     except ValueError as exc:
         parser.error(str(exc))
     try:
-        import cv2
-        args.output.mkdir(parents=True, exist_ok=True)
         tracker = vision_clock = None
         flight_trace = []
 
         def record_flight_frame():
             details = sample_flight_vision(simulation, tracker)
             observation = simulation.observation()
-            flight_trace.append({"t_s": simulation.t, "p_W_m": observation["p_W"].tolist(),
-                "visual": {key: details.get(key) for key in ("detected", "locked", "center_px", "sample_t",
-                                                            "aim_point_px", "dart_reference_px")},
-                "flight_control": observation["flight_control"]})
+            if args.trace:
+                flight_trace.append({"t_s": simulation.t, "p_W_m": observation["p_W"].tolist(),
+                    "visual": {key: details.get(key) for key in ("detected", "locked", "center_px", "sample_t",
+                                                                "aim_point_px", "dart_reference_px")},
+                    "flight_control": observation["flight_control"]})
 
         if simulation.flight_control_enabled:
             if __package__:
@@ -1327,10 +1329,6 @@ def main():
             simulation.step()
             if vision_clock is not None and vision_clock.consume(simulation.t):
                 record_flight_frame()
-        for camera in ("external", "onboard"):
-            frame = simulation.render(camera)
-            if not cv2.imwrite(str(args.output/(camera+".png")), cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)):
-                raise RuntimeError("Unable to save camera image")
         report = simulation.observation()
         report = {key: value.tolist() if isinstance(value,np.ndarray) else value for key,value in report.items()}
         report.update({"engine": "MuJoCo " + mujoco.__version__, "graphics_renderer": simulation.graphics_renderer,
@@ -1338,16 +1336,16 @@ def main():
                        "scene": simulation.scene_metadata, "dart": simulation.dart_metadata,
                        "aerodynamics": simulation.aero_metadata,
                        "flight_control_model": simulation.flight_control_metadata,
+                       "flight_config": simulation.flight_config,
                        "vision_settings": tracker.settings.as_dict() if tracker is not None else None,
                        "launch": simulation.launch_metadata})
-        (args.output/"report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-        (args.output/"flight_config.json").write_text(
-            json.dumps(simulation.flight_config, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
-        if flight_trace:
-            (args.output/"vision_config.json").write_text(
-                json.dumps(tracker.settings.as_dict(), indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
-            (args.output/"flight_control_trace.json").write_text(
-                json.dumps(flight_trace, indent=2, ensure_ascii=False, allow_nan=False)+"\n", encoding="utf-8")
+        if args.output is not None:
+            args.output.mkdir(parents=True, exist_ok=True)
+            (args.output/"result.json").write_text(
+                json.dumps(report, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+            if args.trace:
+                (args.output/"trace.json").write_text(
+                    json.dumps(flight_trace, indent=2, ensure_ascii=False, allow_nan=False)+"\n", encoding="utf-8")
         print(json.dumps(report, ensure_ascii=True))
     finally:
         simulation.close()

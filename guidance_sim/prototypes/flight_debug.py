@@ -1,4 +1,4 @@
-"""Read-only three-axis flight diagnostics, Tk monitor and portable image export.
+"""Read-only three-axis flight diagnostics, Tk monitor and explicit CSV export.
 
 The viewer owns sampling.  This module only consumes observations already taken;
 it never calls a simulation, controller, tracker or random-number generator.
@@ -22,7 +22,7 @@ import numpy as np
 PALETTE = dict(background="#EDF3F8", surface="#FFFFFF", text="#23364A",
                muted="#556C7F", grid="#DFE8EF", command="#176B9A",
                actual="#25806C", feedback="#C47E28", warning="#B23B3B")
-OUTPUTS = Path(__file__).resolve().parents[1] / "outputs" / "flight_debug"
+OUTPUTS = Path(__file__).resolve().parents[1] / "outputs" / "exports"
 AXIS_LABELS = {"pitch": "俯仰", "yaw": "偏航", "roll": "滚转"}
 MODES = {"过载": "g", "姿态角": "deg", "角速率": "deg/s", "等效舵量": "deg"}
 SCHEMA_VERSION = 1
@@ -717,52 +717,6 @@ def draw_states(painter, width, height, record):
                      fill=PALETTE["warning"] if warning else PALETTE["text"])
 
 
-def render_debug_png(path, records, *, modes=None, visible=None, ranges=None,
-                     window_s=3., width=1560, dropped_samples=0, cutoff=None):
-    """Render the same charts directly with Pillow; no GUI or screenshots needed."""
-    from PIL import Image
-    if cutoff is not None:
-        if not _finite(cutoff):
-            raise ValueError("PNG cutoff must be finite")
-        records = [record for record in records if record["t_s"] <= float(cutoff)+1e-12]
-    modes = modes or dict(pitch="过载", yaw="过载", roll="姿态角")
-    ranges = ranges or {}
-    height = 1090
-    image = Image.new("RGB", (int(width), height), PALETTE["background"])
-    painter = _PillowPainter(image)
-    now = records[-1]["t_s"] if records else None
-    painter.text((20, 15), f"三轴飞控调试 · 当前t={_fmt(now,6)}s · 样本{len(records)} · 已截断{dropped_samples}", size=20)
-    painter.text((20, 47), "蓝=请求  绿=物理实际  橙=控制反馈/PWM保持  · CSV保留原始数值  · 纵轴同单位", size=12, fill=PALETTE["muted"])
-    left_width = int(width*.61)-30
-    for index, axis in enumerate(AXIS_LABELS):
-        chart = Image.new("RGB", (left_width, 318), PALETTE["surface"])
-        draw_axis(_PillowPainter(chart), left_width, 318, records, axis, modes[axis],
-                  visible, ranges.get(axis), window_s)
-        image.paste(chart, (20, 80+index*332))
-    right_width = width-left_width-60
-    chart = Image.new("RGB", (right_width, 335), PALETTE["surface"])
-    draw_g_vector(_PillowPainter(chart), right_width, 335, records[-1] if records else None,
-                  visible, ranges.get("g"))
-    image.paste(chart, (left_width+40, 80))
-    panel = Image.new("RGB", (right_width, 642), PALETTE["surface"])
-    draw_states(_PillowPainter(panel), right_width, 642, records[-1] if records else None)
-    image.paste(panel, (left_width+40, 429))
-    # Give exported state tables all their rows, independent of screen height.
-    line_count = len(_state_lines(records[-1] if records else None))
-    needed = 429+36+line_count*21+18
-    if needed > height:
-        expanded = Image.new("RGB", (int(width), needed), PALETTE["background"])
-        expanded.paste(image, (0, 0))
-        panel = Image.new("RGB", (right_width, needed-429-15), PALETTE["surface"])
-        draw_states(_PillowPainter(panel), right_width, panel.height, records[-1] if records else None)
-        expanded.paste(panel, (left_width+40, 429))
-        image = expanded
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(path)
-    return path
-
-
 def render_g_hud(image, record, *, size=220, visible=None, manual_range=None, corner="bottom_right"):
     """Return a display-only RGB copy with a transparent signed-g corner HUD.
 
@@ -910,7 +864,6 @@ class FlightDebugWindow:
         self._status = tk.StringVar(value="等待只读诊断")
         ttk.Label(toolbar, textvariable=self._status).pack(side="left", padx=(0, 12))
         ttk.Button(toolbar, text="导出CSV", command=self._export_csv).pack(side="right", padx=3)
-        ttk.Button(toolbar, text="导出当前图PNG", command=self._export_png).pack(side="right", padx=3)
         self._visible = {key: tk.BooleanVar(value=True) for key in ("command", "actual", "feedback")}
         for key, label in (("command", "请求/目标"), ("actual", "物理实际"), ("feedback", "反馈/保持")):
             ttk.Checkbutton(toolbar, text=label, variable=self._visible[key], command=self._invalidate).pack(side="left", padx=3)
@@ -977,7 +930,6 @@ class FlightDebugWindow:
         toolbar.pack(fill="x", pady=(0, 2))
         self._status = tk.StringVar(value="等待只读诊断")
         ttk.Label(toolbar, textvariable=self._status).pack(side="left")
-        ttk.Button(toolbar, text="PNG", width=5, command=self._export_png).pack(side="right", padx=1)
         ttk.Button(toolbar, text="CSV", width=5, command=self._export_csv).pack(side="right", padx=1)
         options = ttk.Frame(outer)
         options.pack(fill="x", pady=(0, 3))
@@ -1080,7 +1032,6 @@ class FlightDebugWindow:
         self._status = tk.StringVar(value="等待只读诊断")
         ttk.Label(toolbar, textvariable=self._status).pack(side="left", padx=(0, 8))
         ttk.Button(toolbar, text="CSV", width=6, command=self._export_csv).pack(side="right", padx=2)
-        ttk.Button(toolbar, text="PNG", width=6, command=self._export_png).pack(side="right", padx=2)
         self._visible = {key: tk.BooleanVar(value=True) for key in ("command", "actual", "feedback")}
         for key, label in (("feedback", "反馈"), ("actual", "实际"), ("command", "请求")):
             ttk.Checkbutton(toolbar, text=label, variable=self._visible[key], command=self._invalidate).pack(side="right")
@@ -1299,14 +1250,3 @@ class FlightDebugWindow:
         except (OSError, ValueError) as exc:
             messagebox.showerror("导出失败", str(exc), parent=self.window)
 
-    def _export_png(self):
-        from tkinter import messagebox
-        try:
-            modes, visible, ranges, window_s, _ = self._settings()
-            cutoff = self._cutoff()
-            path = render_debug_png(self._path(".png"), self.buffer.series_until(cutoff),
-                                    modes=modes, visible=visible, ranges=ranges, window_s=window_s,
-                                    dropped_samples=self.buffer.dropped_samples, cutoff=cutoff)
-            self._notify(path)
-        except (OSError, ValueError) as exc:
-            messagebox.showerror("导出失败", str(exc), parent=self.window)

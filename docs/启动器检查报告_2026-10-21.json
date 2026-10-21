@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-21",
+  "scope": "仅 --help，不启动窗口、仿真或采集；从 docs 目录调用全部新入口以验证路径定位。",
+  "checks": [
+    {
+      "path": "运行传统控制仿真.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: run.py [-h] [--config CONFIG] [--scene SCENE] [--dart DART]",
+      "uses_only_crlf": false
+    },
+    {
+      "path": "采集专家示范数据.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: dataset.py [-h] [--config CONFIG] [--output OUTPUT]",
+      "uses_only_crlf": true
+    },
+    {
+      "path": "启动器/运行基线物理仿真.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: dart_viewer.py [-h] [--config CONFIG] [--scene SCENE] [--season {2027}]",
+      "uses_only_crlf": true
+    },
+    {
+      "path": "启动器/运行标准导引仿真.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: ideal_guidance_sim.py [-h] [--headless] [--duration DURATION]",
+      "uses_only_crlf": false
+    },
+    {
+      "path": "启动器/运行专家策略仿真.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: ideal_guidance_sim.py [-h] [--headless] [--duration DURATION]",
+      "uses_only_crlf": true
+    },
+    {
+      "path": "启动器/运行参考点微调仿真.cmd",
+      "old_name_removed": true,
+      "entry_arguments_unchanged": true,
+      "help_from_other_directory": true,
+      "exit_code": 0,
+      "usage_line": "usage: ideal_guidance_sim.py [-h] [--headless] [--duration DURATION]",
+      "uses_only_crlf": true
+    }
+  ],
+  "all_pass": true,
+  "line_ending_note": "保留启动器原有行尾格式；uses_only_crlf 仅为格式信息，不是通过条件。路径适配可逆后的原字节哈希用于确认入口和参数未变。"
+}

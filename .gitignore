@@ -3,11 +3,18 @@
 
 # ==== 运行产物与本地环境 ====
 guidance_sim/.venv/
-guidance_sim/outputs/
 guidance_sim/records/
 __pycache__/
 *.py[cod]
 **/MUJOCO_LOG.TXT
+
+# ==== outputs: 只保留 README 索引, 数据/图片/报告原件不入库 ====
+/guidance_sim/outputs/**
+!/guidance_sim/outputs/**/
+!/guidance_sim/outputs/**/README.md
+
+# ==== 实际 STM32 工程: 源码与构建产物都留本地, 不入库 ====
+/Guidedemo/
 
 # ==== 原始 CAD / 机械图纸 (按约定留本地, 运行不依赖) ====
 /local_originals/

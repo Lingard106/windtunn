@@ -101,7 +101,7 @@ class DartViewer:
             vision_settings or VisionSettings.for_profile("simulation"))
         self._vision_image = None
         self._vision_snapshot = {}
-        # 最近一次视觉处理对应的仿真时刻；保存截图不能偷偷多处理一帧。
+        # 最近一次视觉处理对应的仿真时刻；保存结果不能偷偷多处理一帧。
         self._vision_t: float | None = None
         self._vision_raw = None
         self._vision_source = None
@@ -330,7 +330,7 @@ class DartViewer:
                                       style="Accent.TButton")
         self.play_button.pack(side="left")
         ttk.Button(controls, text="重置并应用参数", command=self.reset).pack(side="left", padx=7)
-        ttk.Button(controls, text="保存画面与配置", command=self.save_capture).pack(side="left")
+        ttk.Button(controls, text="保存结果", command=self.save_capture).pack(side="left")
         ttk.Button(controls, text="显示第一视角", command=self.show_onboard).pack(side="left", padx=7)
         ttk.Label(controls, text="拖动分隔线调整侧栏宽度；相机独立显示", style="Muted.TLabel",
                   font=("Microsoft YaHei UI", 9)).pack(side="right")
@@ -1347,35 +1347,10 @@ class DartViewer:
         self.flight_telemetry.set("\n".join(lines))
 
     def save_capture(self) -> None:
-        """保存当前双画面、数字参数和场地来源，便于复现这次观察。
-
-        Tkinter 回调在同一线程依次执行，保存期间不会插入 _tick 推进，
-        所以两张图片和 state.json 对应同一仿真时刻；这不是飞行录像。
-        """
-        # 只补刷新显示；识别结果始终取最近采样，保存动作不产生新识别帧。
-        current_t = float(self.sim.observation()["t"])
-        self._render(force=True)
-        capture_root = ROOT / "outputs"
-        if getattr(self.sim, "_aim_reference_config", None) is not None:
-            capture_root /= "reference_v3"
-        elif getattr(self.sim, "expert_config", {}).get("law") == "ballistic_pn":
-            capture_root /= "pn_expert_v2"
-        folder = capture_root / ("dart_viewer_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
+        """显式保存一份当前状态与配置，不渲染画面或推进采样。"""
+        path = ROOT / "outputs" / "runs" / (
+            "viewer_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f") + ".json")
         try:
-            folder.mkdir(parents=True, exist_ok=False)
-            Image.fromarray(self.sim.render("external")).save(folder / "external.png")
-            for camera, shown in getattr(self, "_display_pictures", {}).items():
-                shown.save(folder / (camera+"_display.png"))
-            Image.fromarray(self._vision_image).save(folder / "onboard.png")
-            Image.fromarray(self._vision_raw).save(folder / "onboard_raw.png")
-            Image.fromarray(self._vision_source).save(folder / "onboard_source.png")
-            Image.fromarray(self.tracker.mask_image(self._vision_raw)).save(folder / "onboard_mask.png")
-            (folder / "config.json").write_text(
-                json.dumps(self.sim.cfg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            (folder / "flight_config.json").write_text(
-                json.dumps(self.sim.flight_config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            (folder / "vision_config.json").write_text(
-                json.dumps(self.tracker.settings.as_dict(), ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
             obs = self.sim.observation()
             state = {
                 "t": float(obs["t"]),
@@ -1399,11 +1374,14 @@ class DartViewer:
                 "vision_sampling": {"target_hz": 90., "processed_frames": self.vision_count,
                                     "missed_grid_slots": self.vision_missed,
                                     "active_wall_s": self.active_wall_s},
+                "numeric_config": self.sim.cfg,
+                "flight_config": self.sim.flight_config,
+                "vision_config": self.tracker.settings.as_dict(),
             }
-            (folder / "state.json").write_text(
-                json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            self.diagnostics.export_csv(folder / "flight_debug.csv", until=current_t)
-            self.message.set(f"已保存当前两幅画面、本次配置及同一时刻的状态：{folder}")
+            payload = json.dumps(state, ensure_ascii=False, indent=2) + "\n"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(payload, encoding="utf-8")
+            self.message.set(f"已保存当前状态与配置：{path}")
         except (OSError, TypeError, ValueError) as exc:
             messagebox.showerror("保存失败", str(exc), parent=self.root)
 

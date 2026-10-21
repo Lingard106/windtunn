@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-21",
+  "reason": "按用户要求采用专业中文用途命名，常用入口留在根目录，四个实验/对照入口归入启动器目录。功能、配置和参数不变。",
+  "renames": [
+    {
+      "old_path": "启动传统控制增强版.cmd",
+      "new_path": "运行传统控制仿真.cmd",
+      "sha256_after": "d5d9a5519e5ac6ed805467d9f11493be1fe7d122ae6a1912de203763f4912a92",
+      "path_adapter_added": false
+    },
+    {
+      "old_path": "采集PN专家数据.cmd",
+      "new_path": "采集专家示范数据.cmd",
+      "sha256_after": "61b30771f9251dc3786869bee2eca94e9920d0f0a425bec8823b28effa00496f",
+      "path_adapter_added": false
+    },
+    {
+      "old_path": "启动v1实跑参数.cmd",
+      "new_path": "启动器/运行基线物理仿真.cmd",
+      "sha256_after": "7ab85734dc62b7a13e5862543449ff207bc62646492f43e95e0b7a59f5e9b6c4",
+      "path_adapter_added": true
+    },
+    {
+      "old_path": "启动理想导引仿真.cmd",
+      "new_path": "启动器/运行标准导引仿真.cmd",
+      "sha256_after": "2cafdbe5324e39e69e3c1bdecea9c2516aedb4f84a127b392ba98969ad4ca0f7",
+      "path_adapter_added": true
+    },
+    {
+      "old_path": "启动PN专家v2.cmd",
+      "new_path": "启动器/运行专家策略仿真.cmd",
+      "sha256_after": "2aec6385a427e8818ee3bc482c849f28ea8a2050771114299b3e218087e0c13b",
+      "path_adapter_added": true
+    },
+    {
+      "old_path": "启动参考微调v3.cmd",
+      "new_path": "启动器/运行参考点微调仿真.cmd",
+      "sha256_after": "41ccaadf703bc5ea3caa7be9d0e7dbfd20344245adc63a9f2bdebcc2929e2465",
+      "path_adapter_added": true
+    }
+  ]
+}
