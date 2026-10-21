@@ -1,0 +1,20 @@
+# 飞镖制导仿真 — gitignore
+# 原则: 源码 / 配置 / 文档 / 运行资产进库; 可再生产物与运行数据不入库。
+
+# ==== 运行产物与本地环境 ====
+guidance_sim/.venv/
+guidance_sim/outputs/
+guidance_sim/records/
+__pycache__/
+*.py[cod]
+**/MUJOCO_LOG.TXT
+
+# ==== 原始 CAD / 机械图纸 (按约定留本地, 运行不依赖) ====
+/local_originals/
+
+# ==== 杂项 ====
+.env
+.env.*
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "name": "2027 红方发射站至蓝方基地固定靶（STL 单一场地来源）",
+  "launch": {
+    "position_W_m": [
+      1.1,
+      6.670945340190169,
+      1.0303854202283316
+    ],
+    "pitch_deg": 35.617,
+    "yaw_deg": -15.238385081410614,
+    "speed_mps": 16.747028357843256
+  },
+  "target": {
+    "position_W_m": [
+      25.588276260375977,
+      4.215240472227322e-07,
+      1.6213411865234377
+    ],
+    "normal_W": [
+      -0.46174737240671077,
+      5.497227894002421e-07,
+      0.8870114791112885
+    ],
+    "radius_m": 0.03,
+    "collision": {
+      "enabled": true,
+      "half_extents_m": [
+        0.03825000000000012,
+        0.033250051478875164
+      ],
+      "thickness_m": 0.01,
+      "nose_radius_m": 0.0185,
+      "friction": [
+        0.35,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.001,
+        0.5
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2
+      ],
+      "provenance": "靶面宽高和镖头约18.5mm半径/5mm厚度参考CAD；靶厚度、摩擦、接触软硬和阻尼为演示估计，非实测材料参数。MuJoCo接触求解，不手工反射速度；未实现真实柔性变形或官方裁判判定。",
+      "nose_length_m": 0.005
+    }
+  },
+  "guide_light": {
+    "center_W_m": [25.498536435943937, -0.00000398460916694, 1.542291734473512],
+    "normal_W": [-0.968148794209, -0.000000000026648, 0.250375542479],
+    "radius_m": 0.0275,
+    "mesh_file": "../assets/guide_light_2027/luminous_cap.stl",
+    "provenance": {
+      "source": "原始 RMUC2027_V1.0.0.STL 穹顶透镜表面，保留世界轴；未使用STP",
+      "nominal_luminous_diameter_m": 0.055,
+      "cad_lens_diameter_m": 0.05700075,
+      "housing_diameter_m": 0.076,
+      "surface_offset_along_normal_m": 0.0002,
+      "rule_reference": "2027规则手册§4.2.2，图4-13，印刷39页/PDF40页；55mm为发光直径，不是外壳直径",
+      "geometry_report": "guidance_sim/assets/guide_light_2027/provenance.json",
+      "rendering": "裁剪后的原始STL三角面已向外偏置0.2mm避免重叠闪烁；不再重复偏置、旋转或缩放；亮度不是实测光度模型"
+    }
+  },
+  "provenance": {
+    "field": "原始 RMUC2027_V1.0.0.STL；场地显示、平台及靶面定位、路径检查统一使用此 STL，STP 不参与本轮计算",
+    "field_source": "D:/WindTunnelSuite/RMUC2027_V1.0.0.STL",
+    "world_transform": {
+      "scale": 0.001,
+      "translation_m": [
+        -0.0008907318115234375,
+        -8.001580144882203,
+        0.0
+      ]
+    },
+    "launch_platform_top_z_m": 0.3303854202283316,
+    "height_above_platform_top_m": 0.7,
+    "launch_platform_center_m": [
+      0.7064995574951173,
+      6.670946710586548,
+      0.3303853759765625
+    ],
+    "launch_platform_bounds_W_m": {
+      "min": [
+        0.1864995880126953,
+        6.3710497379302975,
+        0.32253228759765623
+      ],
+      "max": [
+        1.2264995269775392,
+        6.970843683242798,
+        0.3382384643554688
+      ]
+    },
+    "launch_position": "离架重心选在放置平台前部 X=1.10m、横向居中；Z取该XY处平台上表面+0.7m（世界竖直方向）；队伍发射架未提供，不模拟架内加速",
+    "target_geometry": "原始STL顶部检测模块中央小平面，28个源三角面；零基编号详见几何报告，镖头直接相交面4887437",
+    "target_face_size_m": [
+      0.07650000000000023,
+      0.06650010295775033
+    ],
+    "target_radius": "保留30mm保守圆作数值几何判定，非规则规定命中半径",
+    "physics": "沿用2026的约0.25kg镖体、距镖头全长1/4重心和估计惯量；默认气动未实测标定",
+    "pitch": "沿用2026发射方案35.617度，初速与偏航由MuJoCo求解",
+    "rule_reference": "用户提供2027规则手册，PDF33/38/40/41/42/111页；图中尺寸用于核对，不当作世界坐标",
+    "geometry_report": "guidance_sim/outputs/launch_2027_geometry/geometry_provenance.json"
+  },
+  "calibration": {
+    "scope": "仅本仿真、当前质量/气动假设下的初值标定；不是实物射击参数",
+    "method": "MuJoCo 重放 + 靶平面内二维误差最小化；只调整初速和偏航",
+    "contact_evaluation": "求解时关闭靶板接触以计算自由飞行交点；启用接触后的轨迹另行重放验证",
+    "config": "field_2027_fixed_target_config.json",
+    "result": {
+      "crossing_time_s": 1.9551403627937094,
+      "position_W_m": [
+        25.58827626037566,
+        4.215241067364868e-07,
+        1.6213411865232725
+      ],
+      "miss_distance_m": 3.616768013427576e-13,
+      "hit": true,
+      "in_plane_error_W_m": [
+        -3.164384198942928e-13,
+        5.95137548954753e-14,
+        -1.647268891910882e-13
+      ],
+      "target_position_W_m": [
+        25.588276260375977,
+        4.215240472227322e-07,
+        1.6213411865234377
+      ],
+      "normal_W": [
+        0.4617473724067109,
+        -5.497227894002422e-07,
+        -0.8870114791112887
+      ],
+      "radius_m": 0.03,
+      "method": "镖头首次正向过靶平面，相邻物理步线性插值；非官方裁判判定"
+    },
+    "geometric_yaw_deg": -15.238401287639538,
+    "input_config": "D:\\WindTunnelSuite\\guidance_sim\\profiles\\field_2027_fixed_target_config.json",
+    "assumed_aerodynamics": {
+      "drag_coefficient": 0.35,
+      "normal_coefficient": 2.5,
+      "stability_coefficient": 0.18,
+      "angular_damping_coefficient": 2.0,
+      "rho_kg_m3": 1.225,
+      "wind_cross_mps": 0.0
+    }
+  }
+}

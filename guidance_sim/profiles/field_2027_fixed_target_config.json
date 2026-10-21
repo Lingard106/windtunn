@@ -1,0 +1,19 @@
+{
+  "mass_kg": 0.25,
+  "speed_mps": 16.747028357843256,
+  "pitch_deg": 35.617,
+  "yaw_deg": -15.238385081410614,
+  "launch_height_m": 1.0303854202283316,
+  "drag_coefficient": 0.35,
+  "normal_coefficient": 2.5,
+  "stability_coefficient": 0.18,
+  "angular_damping_coefficient": 2.0,
+  "wind_cross_mps": 0.0,
+  "rho_kg_m3": 1.225,
+  "reference_area_m2": 0.0033587151005579547,
+  "reference_length_m": 0.22261000001000003,
+  "t_max_s": 6.0,
+  "camera_fov_deg": 55.0,
+  "guide_light_brightness": 0.8,
+  "dt_s": 0.002
+}

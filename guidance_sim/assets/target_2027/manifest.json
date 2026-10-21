@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "source": {
+    "name": "RMUC2027_V1.0.0.STL",
+    "format": "binary STL",
+    "size_bytes": 376132484,
+    "triangle_count": 7522648,
+    "sha256": "213a19bcadbcc0bff30981ae280eda6b637f82a013bde9afef027ada2c9a27f6",
+    "geometry_source_policy": "Original STL only; no STEP geometry or alignment"
+  },
+  "coordinates": {
+    "units": "metre",
+    "up_axis": "z",
+    "origin_W_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mesh_axes": "world axes retained; translate assembly body only along world Y",
+    "source_scale": 0.001,
+    "source_translation_m": [
+      -0.0008907318115234375,
+      -8.001580144882203,
+      -0.0
+    ]
+  },
+  "target_center_W_m": [
+    25.588276260375977,
+    4.215240472227322e-07,
+    1.6213411865234377
+  ],
+  "guide_light_center_W_m": [
+    25.498536435943937,
+    -3.984609166940738e-06,
+    1.5422917344735119
+  ],
+  "assembly_bounds_W_m": {
+    "min": [
+      25.485511611938477,
+      -0.11949957847595272,
+      1.4749288330078125
+    ],
+    "max": [
+      25.68864051818848,
+      0.11950042152404805,
+      1.6819039306640626
+    ]
+  },
+  "source_triangle_id_ranges_inclusive": [
+    [
+      4760420,
+      4786491
+    ],
+    [
+      4837582,
+      4890435
+    ],
+    [
+      5307704,
+      5310193
+    ],
+    [
+      7455962,
+      7462923
+    ],
+    [
+      7463140,
+      7463219
+    ],
+    [
+      7466496,
+      7467571
+    ]
+  ],
+  "source_triangle_count": 89534,
+  "excluded_static_parts": "Long horizontal rail, rail fasteners, lower central carriage/support, and two adjacent-ID floor screws remain static.",
+  "variants": {
+    "lite": {
+      "meshes": [
+        {
+          "name": "target_shell_lite_00",
+          "file": "assembly/lite/target_shell_lite_00.stl",
+          "rgba": [
+            0.58,
+            0.62,
+            0.66,
+            1.0
+          ],
+          "triangle_count": 12068,
+          "sha256": "82b343d45cb23f5ae935e3d1125bfd7ccddc7280d9b24c7754467c3bc8726f82"
+        },
+        {
+          "name": "target_sensor_exact",
+          "file": "assembly/shared/target_sensor_exact.stl",
+          "rgba": [
+            0.58,
+            0.62,
+            0.66,
+            1.0
+          ],
+          "triangle_count": 3940,
+          "sha256": "c288998e8624cd716a86c104677e058124e2523bb9aaca1b3a5d7fb856096c3b"
+        },
+        {
+          "name": "target_lamp_exact",
+          "file": "assembly/shared/target_lamp_exact.stl",
+          "rgba": [
+            0.58,
+            0.62,
+            0.66,
+            1.0
+          ],
+          "triangle_count": 6710,
+          "sha256": "96b83f772325a0feca68919e1245c88617540e72946d387e42abcf944b9da858"
+        }
+      ],
+      "static_replacements": {
+        "field_0136": "static/lite/field_0136.stl",
+        "field_0138": "static/lite/field_0138.stl",
+        "field_0139": "static/lite/field_0139.stl",
+        "field_0151": "static/lite/field_0151.stl",
+        "field_0213": "static/lite/field_0213.stl"
+      },
+      "assembly_triangle_count": 22718,
+      "assembly_shell_voxel_mm": 2.0,
+      "sensor_and_lamp_geometry": "Exact original source triangles retained; no simplification",
+      "static_replacement_triangle_counts": {
+        "field_0136": 327,
+        "field_0138": 205,
+        "field_0139": 360,
+        "field_0151": 2130,
+        "field_0213": 213
+      }
+    }
+  },
+  "separation_validation": {
+    "exact_vertex_connected_components": 46,
+    "all_selected_components_complete": true,
+    "selected_triangle_overlap_with_long_rail_component": 0,
+    "selected_triangle_overlap_with_lower_carriage_component": 0,
+    "static_source_plus_assembly_partition": "For each affected source chunk, retained IDs and assembly IDs are disjoint and their union equals all original source IDs.",
+    "original_field_manifests_modified_by_this_export": false
+  },
+  "provenance_file": "provenance.json",
+  "generator": "guidance_sim/scripts/split_2027_target.py"
+}

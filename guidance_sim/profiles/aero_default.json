@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "model": "estimated_passive",
+  "parameter_version": "estimated-passive-v1",
+  "parameters": {
+    "drag_coefficient": 0.35,
+    "normal_coefficient": 2.5,
+    "stability_coefficient": 0.18,
+    "angular_damping_coefficient": 2.0,
+    "rho_kg_m3": 1.225
+  },
+  "provenance": {
+    "classification": "engineering_estimate",
+    "validation_status": "unvalidated",
+    "cfd_data_used": false,
+    "description": "沿用当前 MuJoCo 演示的估计参数，未由当前镖体 CFD 或飞行实测标定。",
+    "normal_coefficient_definition": "normal_coefficient 是当前模型对相对速度横向分量的侧向系数，不是可直接解释为 CL 的升力系数。",
+    "reference_geometry": "参考面积与长度由本次仿真的数字配置提供；CAD 方案可单独覆盖。"
+  }
+}

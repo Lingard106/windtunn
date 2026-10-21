@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "model": "guidedemo_png_autopilot_v1",
+  "provenance": {
+    "source": "guidance_sim/reference/guidedemo/source_manifest.json",
+    "classification": "existing_geometry_candidate_not_acceleration_tracking_tuned",
+    "description": "Existing fixed-target candidate: PNG N10, shared Kr0.05 Ka0.5 Ki1.7, roll P0.1. Current estimated plant has inadequate overload tracking. These gains are not claimed optimal.",
+    "diagnosis": "2026-10-19: unit conversions verified; v1 negative-integral anti-windup corrected and measured visual rays use full self-attitude transport. Controller gains, passive aero, servo and actuation numbers unchanged. Earlier geometric contact is not evidence of overload tracking."
+  },
+  "tail_layout": {
+    "model": "x_tail_four_orthogonal",
+    "body_axes": [
+      "+X_forward",
+      "+Y_left",
+      "+Z_up"
+    ],
+    "azimuth_reference": "+Y_toward_+Z",
+    "azimuth_deg": [
+      135.0,
+      45.0,
+      225.0,
+      315.0
+    ],
+    "channel_positions": [
+      "upper_right",
+      "upper_left",
+      "lower_right",
+      "lower_left"
+    ],
+    "numbering": "simulation_channels_0_to_3",
+    "pwm_wiring": "unverified",
+    "axial_interpretation": "azimuth_only_no_axial_rows_inferred"
+  },
+  "controller": {
+    "period_s": 0.005,
+    "png_N": 10.0,
+    "closing_speed_mps": 20.0,
+    "max_accel_g": 5.0,
+    "k_rate": 0.05,
+    "k_alpha": 0.5,
+    "k_int": 1.7,
+    "saturation_deg": 30.0,
+    "filter_k_alpha": 0.902,
+    "filter_k_theta": 0.239,
+    "filter_b1_s": 0.0129,
+    "filter_tau_s": 3.757,
+    "roll_gain": 0.1,
+    "vision_timeout_s": 0.15,
+    "autopilot_mode": "guidedemo_v1",
+    "pitch_enabled": true,
+    "yaw_enabled": true,
+    "aim_pitch_gain_g_per_deg": 0.1,
+    "aim_yaw_gain_g_per_deg": 0.0,
+    "aim_accel_limit_g": 1.0,
+    "pitch_los_sign": 1.0,
+    "pitch_gyro_compensation_sign": 1.0,
+    "pitch_guidance_sign": 1.0,
+    "pitch_accel_feedback_sign": 1.0,
+    "pitch_rate_feedback_sign": 1.0,
+    "pitch_output_sign": 1.0,
+    "yaw_los_sign": 1.0,
+    "yaw_gyro_compensation_sign": 1.0,
+    "yaw_guidance_sign": 1.0,
+    "yaw_accel_feedback_sign": 1.0,
+    "yaw_rate_feedback_sign": 1.0,
+    "yaw_output_sign": 1.0,
+    "pid_pitch_kp_deg_per_g": 1.0,
+    "pid_pitch_ki_deg_per_g_s": 0.0,
+    "pid_pitch_kd_deg_s_per_g": 0.0,
+    "pid_pitch_integral_limit_g_s": 10.0,
+    "pid_pitch_rate_gain_s": 0.0,
+    "pid_yaw_kp_deg_per_g": 1.0,
+    "pid_yaw_ki_deg_per_g_s": 0.0,
+    "pid_yaw_kd_deg_s_per_g": 0.0,
+    "pid_yaw_integral_limit_g_s": 10.0,
+    "pid_yaw_rate_gain_s": 0.0
+  },
+  "servo": {
+    "limit_deg": 30.0,
+    "rate_deg_s": 300.0,
+    "tau_s": 0.01,
+    "pwm_period_s": 0.02,
+    "center_us": 1500.0,
+    "us_per_deg": 10.0,
+    "pwm_min_us": 1000.0,
+    "pwm_max_us": 2000.0
+  },
+  "actuation": {
+    "normal_per_rad": 2.0,
+    "pitch_moment_per_rad": 0.4,
+    "yaw_moment_per_rad": 0.4,
+    "roll_moment_per_rad": 0.08,
+    "drag_per_rad2": 0.15
+  },
+  "imu_noise": {
+    "enabled": false,
+    "scale": 1.0,
+    "attitude_std_deg": 0.2,
+    "rate_std_deg_s": 0.5,
+    "accel_std_g": 0.02,
+    "seed": 2027,
+    "period_s": 0.005
+  }
+}

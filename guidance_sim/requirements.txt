@@ -1,0 +1,6 @@
+# 制导仿真运行依赖 (Python 3.11, 需带 Tkinter)
+# 界面与绘图使用 Tkinter (标准库), 运行时数值/渲染/视觉依赖如下
+mujoco==3.16.0
+numpy==1.26.4
+opencv-python==4.10.0.84
+Pillow==12.3.0

@@ -1,0 +1,14 @@
+{
+  "mass_kg": 0.15,
+  "speed_mps": 20.0,
+  "pitch_deg": 12.0,
+  "yaw_deg": 0.0,
+  "launch_height_m": 1.6,
+  "wind_cross_mps": 0.0,
+  "reference_area_m2": 0.002,
+  "reference_length_m": 0.45,
+  "t_max_s": 4.0,
+  "camera_fov_deg": 55.0,
+  "guide_light_brightness": 0.8,
+  "dt_s": 0.002
+}

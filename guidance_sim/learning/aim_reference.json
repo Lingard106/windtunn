@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "mode": "image_reference",
+  "image_size_px": [320, 240],
+  "calibrated_aim_point_px": [160, 180],
+  "reference_distance_m": 1.0,
+  "description": "The red cross is the desired green-lamp image position at a declared calibration view. [160,180] is the retained v2 zero-bias reference for the upper target. 1m is an explicit angular-to-metric scale, not measured camera-to-target range. Moving the cross down shifts the requested goal up; moving it right shifts the goal left. The offset is fixed in the mapped target plane and is not continuous image chasing."
+}

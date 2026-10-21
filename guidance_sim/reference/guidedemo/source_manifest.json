@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "source_directory": "C:\\Users\\lingard\\Desktop\\Guidedemo",
+  "archived_on": "2026-10-17",
+  "purpose": "Unmodified source reference for the active PNG and Autopilot v1 simulation port. v2 and ISMCG are archived for provenance and are not selected.",
+  "files": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "f835f758c3793030c46e8a29db72393e5a12a6f9e3553b87d086de4bf739b6a6",
+      "size_bytes": 3597
+    },
+    {
+      "path": "Task/Src/guidanceTask.cpp",
+      "sha256": "7770c550c84329082d741a18f0153ac1b32c9dcedd585866bd95b4baeac4894e",
+      "size_bytes": 9567
+    },
+    {
+      "path": "Task/Inc/guidanceTask.h",
+      "sha256": "c66459134020ec16a25c6eeb05ae66108c06e0ebc1f06e82a2dcd93c0084fc95",
+      "size_bytes": 1348
+    },
+    {
+      "path": "Task/Src/imuTask.cpp",
+      "sha256": "749f71c7b422ba10ac470f5eb500d6ed34fe458f686b7084b5ed402aeaca9756",
+      "size_bytes": 3030
+    },
+    {
+      "path": "Algorithm/Inc/png.h",
+      "sha256": "1f4a7ebbbb7fcab65df057e904eae05ac7b8e4df1c6f1d248ee2befba2c35d58",
+      "size_bytes": 823
+    },
+    {
+      "path": "Algorithm/Src/png.cpp",
+      "sha256": "36b8ef1e6f7a04c4afc7f2a76661da24ee6b41fc20ef33942d2c64ea8887e958",
+      "size_bytes": 525
+    },
+    {
+      "path": "Algorithm/Inc/dart_autopilot.h",
+      "sha256": "becd617183e1f3e87e0b66c168e7c6e4de502396e76b4fde2513be70e977900d",
+      "size_bytes": 1951
+    },
+    {
+      "path": "Algorithm/Src/dart_autopilot.cpp",
+      "sha256": "07866021eee1587074846f361514ce1ad613415bdb84e6fc29ca93de97822a46",
+      "size_bytes": 2243
+    },
+    {
+      "path": "Algorithm/Inc/dart_autopilot_v2.h",
+      "sha256": "c927a6e4d672a92b06468d8db5fcff761f31ac45d46e2f64752f1068f9fcbd65",
+      "size_bytes": 4318
+    },
+    {
+      "path": "Algorithm/Src/dart_autopilot_v2.cpp",
+      "sha256": "8698c3957f163f852d75ee1aa680c1266b120019cbab54604613d1f2e9e94895",
+      "size_bytes": 5523
+    },
+    {
+      "path": "Algorithm/Inc/ismcg.h",
+      "sha256": "336b6c1877ecc11368039c683dcb821af1142a1fe5684a4179dc1848755a529b",
+      "size_bytes": 1272
+    },
+    {
+      "path": "Algorithm/Src/ismcg.cpp",
+      "sha256": "a4be6b6de6701803a215618929740373ec6ae96115b57ceedcfe6b17a12a8637",
+      "size_bytes": 1586
+    },
+    {
+      "path": "Algorithm/Inc/FusionAHRS.h",
+      "sha256": "d3a283d360f5680a1a5df9938e073aa0468a4857981f778ffa35ff7db76586e0",
+      "size_bytes": 1150
+    },
+    {
+      "path": "Algorithm/Src/FusionAHRS.cpp",
+      "sha256": "66381addf6909d96fb3c7ff6a48bb15b51068b1eacda66593ed63c6f1bbec327",
+      "size_bytes": 3119
+    },
+    {
+      "path": "BMI088/Src/BMI088.cpp",
+      "sha256": "767def1058626da4141bdca42e16fe413e9e614bae866388205bac1655302b05",
+      "size_bytes": 12892
+    },
+    {
+      "path": "docs/guidance_measurement.md",
+      "sha256": "48947a252cfe7c2f06c6808f9a7b1a698040db2af8a40be897f56af2e762894e",
+      "size_bytes": 5924
+    }
+  ]
+}

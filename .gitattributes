@@ -1,0 +1,20 @@
+# 统一 LF (跨平台脚本/配置一致)
+* text=auto eol=lf
+
+# 双击启动的 Windows 脚本必须是 CRLF — cmd 的 label/goto 对 LF 敏感
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# 运行资产与来源哈希参考件按原始字节存储, 不做行尾转换
+# (assets/*/manifest.json 记录来源 STEP 的 SHA256, 改动字节会让登记信息失去意义)
+guidance_sim/assets/** -text
+guidance_sim/reference/** -text
+
+# 二进制图形 / 数组 / 网格
+*.stl binary
+*.STL binary
+*.png binary
+*.jpg binary
+*.npz binary
+*.npy binary

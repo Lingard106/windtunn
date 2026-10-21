@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "master_seed": 2027101901,
+  "episodes": {"train": 48, "validation": 12, "test": 12},
+  "duration_s": 2.6,
+  "goal_tolerance_m": 0.01,
+  "camera_hz": 90.0,
+  "expert_config": "pn_expert_v2/config.json",
+  "aim_reference_config": "learning/aim_reference.json",
+  "vision_config": "profiles/vision_desktop.json",
+  "randomization": {
+    "position_xyz_half_width_m": [0.05, 0.05, 0.05],
+    "wind_cross_half_width_mps": 1.0,
+    "yaw_half_width_deg": 0.2,
+    "pitch_half_width_deg": 0.1,
+    "speed_half_width_mps": 0.05,
+    "reference_half_width_px": [2, 2]
+  }
+}

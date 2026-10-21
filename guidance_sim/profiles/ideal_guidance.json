@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "model": "guidedemo_png_autopilot_v1",
+  "provenance": {
+    "classification": "uncalibrated_reduced_order_overload_response",
+    "description": "Preserved traditional image-PN comparison, N10 and original launch preset. Bypass servo/control-surface mapping, retain bounded finite overload response, gravity and quadratic drag. No PN expert v2 initial calibration is applied.",
+    "command_semantics": "Specific force in g, pitch down/yaw right positive. PNG request and attainable control force are distinct. Limit is the combined control-force norm, excluding gravity and passive drag. No automatic gravity compensation. Body forward follows velocity with zero Euler roll.",
+    "parameter_basis": "0.25g is a fixed-envelope assumption near estimated direct 30deg control force 0.246g at launch 16.747m/s; not measured total dart capability or a speed-scaled aerodynamic prediction. Tau0.10s and slew2.5g/s are editable assumptions. 90deg deflection cannot be validated by extrapolating the linear derivative."
+  },
+  "reduced_order": {
+    "max_control_g": 0.25,
+    "response_tau_s": 0.1,
+    "max_slew_g_s": 2.5,
+    "drag_enabled": true
+  },
+  "controller": {
+    "period_s": 0.005,
+    "png_N": 10.0,
+    "closing_speed_mps": 20.0,
+    "max_accel_g": 5.0,
+    "aim_pitch_gain_g_per_deg": 0.0,
+    "aim_yaw_gain_g_per_deg": 0.0,
+    "roll_gain": 0.0,
+    "vision_timeout_s": 0.15,
+    "pitch_enabled": true,
+    "yaw_enabled": true
+  },
+  "imu_noise": {
+    "enabled": false
+  }
+}

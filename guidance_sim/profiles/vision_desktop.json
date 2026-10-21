@@ -1,0 +1,22 @@
+{
+  "lab": [
+    15,
+    95,
+    -95,
+    -20,
+    8,
+    95
+  ],
+  "exposure_us": 2500,
+  "profile": "simulation",
+  "bloom_radius_px": 4,
+  "bloom_gain": 2.0,
+  "aim_point_px": [
+    160,
+    125
+  ],
+  "dart_reference_px": [
+    130,
+    120
+  ]
+}
